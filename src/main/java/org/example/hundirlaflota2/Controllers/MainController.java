@@ -14,6 +14,10 @@ public class MainController extends FatherController {
         this.client = Client;
     }
 
+    public MainController() {
+        this.client = null;
+    }
+
     @FXML
     public void handleButtonClick(ActionEvent event) {
         MainApp mainApp = new MainApp();

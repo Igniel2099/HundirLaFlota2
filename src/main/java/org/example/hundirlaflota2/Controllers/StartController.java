@@ -12,6 +12,10 @@ public class StartController extends FatherController{
         this.client = client;
     }
 
+    public StartController() {
+        this.client = null;
+    }
+
     @FXML
     public void handleButtonClick(ActionEvent event){
         System.out.println("Click del disparo");
