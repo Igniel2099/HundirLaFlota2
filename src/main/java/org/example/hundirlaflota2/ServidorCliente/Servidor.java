@@ -23,9 +23,9 @@ public class Servidor {
             SocketTwo = serverSocket.accept();
 
             DataInputStream inOne = new DataInputStream(SocketOne.getInputStream());
-            DataOutputStream outOne = new DataOutputStream(SocketTwo.getOutputStream());
+            DataOutputStream outOne = new DataOutputStream(SocketOne.getOutputStream());
 
-            DataInputStream inTwo = new DataInputStream(SocketOne.getInputStream());
+            DataInputStream inTwo = new DataInputStream(SocketTwo.getInputStream());
             DataOutputStream outTwo = new DataOutputStream(SocketTwo.getOutputStream());
 
             outOne.writeUTF("Te has conectado al servidor :)");

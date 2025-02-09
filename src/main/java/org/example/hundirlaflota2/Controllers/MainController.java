@@ -23,6 +23,7 @@ public class MainController extends FatherController {
 
         }catch(Exception e){
             System.out.println("Error en el MainController, método handleButtonClick: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -36,6 +37,7 @@ public class MainController extends FatherController {
 
         }catch(Exception e){
             System.out.println("Error en el initialize del Cliente: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

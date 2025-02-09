@@ -22,6 +22,7 @@ public class UploadController extends FatherController {
 
         }catch(Exception e){
             System.out.println("Error en el UploadController: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -33,12 +34,13 @@ public class UploadController extends FatherController {
             client.sendMessage("Soy client: " + client.getNombreCliente());
         }catch(Exception e){
             System.out.println("Error en el clienteStart: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     public void initialize() {
-        clientStart();
+        new Thread(this::clientStart).start();
     }
 
 }

@@ -16,6 +16,7 @@ public class LoginController extends FatherController{
 
         }catch(Exception e){
             System.out.println("Error en el LoginController: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
