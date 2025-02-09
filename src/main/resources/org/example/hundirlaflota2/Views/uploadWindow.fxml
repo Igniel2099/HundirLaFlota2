@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.hundirlaflota2.Controllers.UploadController">
+
+    <Label layoutX="129.0" layoutY="14.0" text="Upload Window">
+        <font>
+            <Font size="48" />
+        </font>
+    </Label>
+    <Button layoutX="266.0" layoutY="187.0" text="Cargando" onAction="#handleButtonClick"/>
+
+</AnchorPane>
