@@ -1,15 +1,13 @@
 package org.example.hundirlaflota2.ServidorCliente;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Cliente {
     public final String nombreCliente;
     private Socket socket;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private DataOutputStream out;
+    private DataInputStream in;
 
     public String getNombreCliente() {
         return nombreCliente;
@@ -19,11 +17,11 @@ public class Cliente {
         return socket;
     }
 
-    public ObjectOutputStream getOut() {
+    public DataOutputStream getOut() {
         return out;
     }
 
-    public ObjectInputStream getIn() {
+    public DataInputStream getIn() {
         return in;
     }
 
@@ -31,11 +29,11 @@ public class Cliente {
         this.socket = socket;
     }
 
-    public void setOut(ObjectOutputStream out) {
+    public void setOut(DataOutputStream out) {
         this.out = out;
     }
 
-    public void setIn(ObjectInputStream in) {
+    public void setIn(DataInputStream in) {
         this.in = in;
     }
 
@@ -45,9 +43,9 @@ public class Cliente {
 
     public void connectionToServer() throws IOException {
 
-        setSocket(new Socket("localhost",5000));
-        setIn(new ObjectInputStream(getSocket().getInputStream()));
-        setOut(new ObjectOutputStream(getSocket().getOutputStream()));
+        setSocket(new Socket("192.168.1.29",5000));
+        setIn(new DataInputStream(getSocket().getInputStream()));
+        setOut(new DataOutputStream(getSocket().getOutputStream()));
         System.out.println("Conectado al servidor");
 
     }
