@@ -6,14 +6,10 @@ import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
 public class StartController extends FatherController{
 
-    public final Cliente client;
+    private Cliente client;
 
-    public StartController(Cliente client) {
+    public void setClient(Cliente client) {
         this.client = client;
-    }
-
-    public StartController() {
-        this.client = null;
     }
 
     @FXML

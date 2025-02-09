@@ -8,14 +8,10 @@ import org.example.hundirlaflota2.Windows.StartWindow;
 
 public class MainController extends FatherController {
 
-    public Cliente client;
+    private Cliente client;
 
-    public MainController(Cliente Client) {
-        this.client = Client;
-    }
-
-    public MainController() {
-        this.client = null;
+    public void setClient(Cliente client) {
+        this.client = client;
     }
 
     @FXML

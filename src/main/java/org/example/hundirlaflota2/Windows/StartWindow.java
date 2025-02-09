@@ -1,5 +1,6 @@
 package org.example.hundirlaflota2.Windows;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.hundirlaflota2.Controllers.StartController;
@@ -7,8 +8,18 @@ import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
 public class StartWindow  extends FatherWindow {
 
+    public Cliente cliente;
+
+    @Override
+    public void getController(FXMLLoader loader, Stage stage) {
+        StartController startController = loader.getController();
+
+        startController.setStage(stage);
+        startController.setClient(cliente);
+    }
+
     public StartWindow(Cliente client) {
-        controller = new StartController(client);
+        cliente = client;
         pathView = "/org/example/hundirlaflota2/Views/startWindow.fxml";
     }
 }
