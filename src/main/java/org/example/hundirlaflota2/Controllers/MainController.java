@@ -30,7 +30,7 @@ public class MainController extends FatherController {
     /**
      * Método para que client envie menasjes
      */
-    private void sendMessageClint(){
+    public void sendMessageClint(){
         try{
 
             client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente());
@@ -44,9 +44,7 @@ public class MainController extends FatherController {
 
     @FXML
     public void initialize() {
-        if (client != null) {
-            sendMessageClint();
-        }
+
     }
 
 

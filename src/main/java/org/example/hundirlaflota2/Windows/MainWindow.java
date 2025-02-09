@@ -17,6 +17,7 @@ public class MainWindow extends FatherWindow {
         mainController.setStage(stage);
 
         mainController.setClient(cliente);
+        mainController.sendMessageClint();
 
     }
 
