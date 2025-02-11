@@ -47,5 +47,6 @@ public class StartController extends FatherController{
     @FXML
     public void handleButtonClick(ActionEvent event){
         System.out.println("Click del disparo");
+        sendMessageClint();
     }
 }
