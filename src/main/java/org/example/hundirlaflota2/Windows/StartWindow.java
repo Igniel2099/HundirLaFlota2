@@ -19,6 +19,8 @@ public class StartWindow  extends FatherWindow {
         startController.sendMessageClint();
         try {
             System.out.println(startController.getClient().receiveMessageString());
+
+            startController.turno();
         }catch (Exception e){
             e.printStackTrace();
         }

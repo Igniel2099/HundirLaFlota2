@@ -19,26 +19,27 @@ public class StartController extends FatherController{
         try{
 
             client.sendMessageString("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en StartWindow");
-            boolean atacante = client.receiveMessageString().equals("Atacas");
-            if(atacante){
-                // El que ataca
-                // -x-y-
-                // disparo provisional
-                client.sendMessageString("1,2");
-                int queToque = client.receiveMessageInt();
-            }else {
-                // El que espera
-                client.receiveMessageString();
-                // Mensaje del que toco provisional
-                client.sendMessageInt(2);
-            }
-
-
-
 
         }catch(Exception e){
             System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void turno() throws Exception{
+
+        boolean atacante = client.receiveMessageString().equals("Atacas");
+        if(atacante){
+            // El que ataca
+            // -x-y-
+            // disparo provisional
+            client.sendMessageString("1,2");
+            int queToque = client.receiveMessageInt();
+        }else {
+            // El que espera
+            client.receiveMessageString();
+            // Mensaje del que toco provisional
+            client.sendMessageInt(2);
         }
     }
 
@@ -47,6 +48,6 @@ public class StartController extends FatherController{
     @FXML
     public void handleButtonClick(ActionEvent event){
         System.out.println("Click del disparo");
-        sendMessageClint();
+
     }
 }
