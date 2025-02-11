@@ -33,9 +33,15 @@ public class Servidor {
 
             System.out.println("Conectado dos personas al servidor");
 
-            for (int i = 0; i < 2; i++) {
-                outTwo.writeUTF(inOne.readUTF());
-                outOne.writeUTF(inTwo.readUTF());
+            for (int i = 0; i < 3; i++) {
+                String msOne = inOne.readUTF();
+                String msTwo = inTwo.readUTF();
+
+                System.out.println(msOne + "\n" + msTwo);
+
+                outTwo.writeUTF(msOne);
+                outOne.writeUTF(msTwo);
+
             }
 
 

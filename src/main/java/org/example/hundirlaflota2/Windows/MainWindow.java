@@ -18,6 +18,11 @@ public class MainWindow extends FatherWindow {
 
         mainController.setClient(cliente);
         mainController.sendMessageClint();
+        try {
+            System.out.println(mainController.getClient().receiveMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

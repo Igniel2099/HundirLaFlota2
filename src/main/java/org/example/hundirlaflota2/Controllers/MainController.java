@@ -10,6 +10,10 @@ public class MainController extends FatherController {
 
     private Cliente client;
 
+    public Cliente getClient() {
+        return client;
+    }
+
     public void setClient(Cliente client) {
         this.client = client;
     }
@@ -33,10 +37,10 @@ public class MainController extends FatherController {
     public void sendMessageClint(){
         try{
 
-            client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente());
+            client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en WindowMain");
 
         }catch(Exception e){
-            System.out.println("Error en el initialize del Cliente: " + e.getMessage());
+            System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());
             e.printStackTrace();
         }
     }

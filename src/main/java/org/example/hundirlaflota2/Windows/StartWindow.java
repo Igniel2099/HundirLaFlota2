@@ -16,6 +16,12 @@ public class StartWindow  extends FatherWindow {
 
         startController.setStage(stage);
         startController.setClient(cliente);
+        startController.sendMessageClint();
+        try {
+            System.out.println(startController.getClient().receiveMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public StartWindow(Cliente client) {

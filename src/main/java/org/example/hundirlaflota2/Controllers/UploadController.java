@@ -29,9 +29,10 @@ public class UploadController extends FatherController {
     public void clientStart(){
         try {
             client.connectionToServer();
-            String mensajeDelOtroCliente = client.receiveMessage();
-            System.out.println("Este es el mensaje del otro client que me envia el servidor: " + mensajeDelOtroCliente);
+            String mensajeDelServidor = client.receiveMessage();
+            System.out.println("Este es el mensaje del servidor: " + mensajeDelServidor);
             client.sendMessage("Soy client: " + client.getNombreCliente());
+            System.out.println("Mensaje recibido del otro cliente" + client.receiveMessage());
         }catch(Exception e){
             System.out.println("Error en el clienteStart: " + e.getMessage());
             e.printStackTrace();

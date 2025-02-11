@@ -8,9 +8,25 @@ public class StartController extends FatherController{
 
     private Cliente client;
 
+    public Cliente getClient() {
+        return client;
+    }
+
     public void setClient(Cliente client) {
         this.client = client;
     }
+    public void sendMessageClint(){
+        try{
+
+            client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en StartWindow");
+
+        }catch(Exception e){
+            System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
 
     @FXML
     public void handleButtonClick(ActionEvent event){
