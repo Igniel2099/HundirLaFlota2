@@ -37,7 +37,7 @@ public class MainController extends FatherController {
     public void sendMessageClint(){
         try{
 
-            client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en WindowMain");
+            client.sendMessageString("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en WindowMain");
 
         }catch(Exception e){
             System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());

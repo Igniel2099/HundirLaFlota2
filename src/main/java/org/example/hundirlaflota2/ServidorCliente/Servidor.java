@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Servidor {
     public static void main(String[] args) {
@@ -42,6 +45,30 @@ public class Servidor {
                 outTwo.writeUTF(msOne);
                 outOne.writeUTF(msTwo);
 
+            }
+
+            // Elección de personajes uno ataca y otro recibe
+            List<String> listaAcciones = new ArrayList<>(
+                    Arrays.asList(
+                            "Atacas",
+                            "Esperas"
+                    )
+            );
+
+            for (int i = 0; i < 3; i++){
+                outOne.writeUTF(listaAcciones.getFirst());
+                outTwo.writeUTF(listaAcciones.getLast());
+
+                //------------------------------Turno------------------------------
+                // Ataca el Atacante y le manda el Ataque al que Espera
+                String messageAtacante = inOne.readUTF();
+                outTwo.writeUTF(messageAtacante);
+                // El que Espera manda la respuesta de que toco al Atacante
+                int respuestaEsperador = inTwo.readInt();
+                outOne.writeInt(respuestaEsperador);
+
+                String primerElemento = listaAcciones.removeFirst();
+                listaAcciones.add(primerElemento);
             }
 
 

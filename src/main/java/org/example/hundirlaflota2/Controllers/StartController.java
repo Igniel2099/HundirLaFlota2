@@ -18,7 +18,23 @@ public class StartController extends FatherController{
     public void sendMessageClint(){
         try{
 
-            client.sendMessage("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en StartWindow");
+            client.sendMessageString("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en StartWindow");
+            boolean atacante = client.receiveMessageString().equals("Atacas");
+            if(atacante){
+                // El que ataca
+                // -x-y-
+                // disparo provisional
+                client.sendMessageString("1,2");
+                int queToque = client.receiveMessageInt();
+            }else {
+                // El que espera
+                client.receiveMessageString();
+                // Mensaje del que toco provisional
+                client.sendMessageInt(2);
+            }
+
+
+
 
         }catch(Exception e){
             System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());

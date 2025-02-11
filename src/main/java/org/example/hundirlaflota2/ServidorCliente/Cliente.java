@@ -50,12 +50,21 @@ public class Cliente {
 
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessageString(String message) throws IOException {
         getOut().writeUTF(message);
     }
 
-    public String receiveMessage() throws IOException {
+    public void sendMessageInt(int message) throws IOException {
+        getOut().writeInt(message);
+    }
+
+
+    public String receiveMessageString() throws IOException {
         return (String) getIn().readUTF();
+    }
+
+    public int receiveMessageInt() throws IOException {
+        return getIn().readInt();
     }
 
 }
