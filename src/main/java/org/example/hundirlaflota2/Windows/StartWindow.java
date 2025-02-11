@@ -20,7 +20,6 @@ public class StartWindow  extends FatherWindow {
         try {
             System.out.println(startController.getClient().receiveMessageString());
 
-            startController.turno();
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -35,9 +35,12 @@ public class StartController extends FatherController{
             // disparo provisional
             client.sendMessageString("1,2");
             int queToque = client.receiveMessageInt();
+            System.out.println("Lo que toque fue: " + queToque);
         }else {
             // El que espera
-            client.receiveMessageString();
+            String recibioDisparo = client.receiveMessageString();
+
+            System.out.println("El disparo es: " + recibioDisparo);
             // Mensaje del que toco provisional
             client.sendMessageInt(2);
         }
@@ -48,6 +51,11 @@ public class StartController extends FatherController{
     @FXML
     public void handleButtonClick(ActionEvent event){
         System.out.println("Click del disparo");
+        try{
+            turno();
 
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
