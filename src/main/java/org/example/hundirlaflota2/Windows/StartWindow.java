@@ -55,6 +55,7 @@ public class StartWindow  extends FatherWindow {
                     )
             );
 
+            notifyAll();
         }catch (Exception e){
             e.printStackTrace();
         }

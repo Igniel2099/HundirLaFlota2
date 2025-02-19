@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
+import java.io.IOException;
+
 public class StartController extends FatherController{
 
     private Cliente client;
@@ -60,21 +62,7 @@ public class StartController extends FatherController{
             System.out.println("Lo que toque fue: " + queToque);
         }else {
             // El que espera
-            String recibioDisparo = client.receiveMessageString();
 
-            System.out.println("El disparo es: " + recibioDisparo);
-            // Mensaje del que toco provisional
-            client.sendMessageInt(2);
-
-            setActivatedButton(
-                    new SimpleBooleanProperty(true)
-            );
-
-            getBulletButton().setText(
-                getActivatedButton().get()
-                    ? "Presiona"
-                    : "Esperando..."
-            );
         }
     }
 
@@ -87,5 +75,41 @@ public class StartController extends FatherController{
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void initialize() {
+        Thread hiloEscuchando = new Thread(() -> {
+            try{
+                String recibioDisparo = client.receiveMessageString();
+
+                System.out.println("El disparo es: " + recibioDisparo);
+                // Mensaje del que toco provisional
+                client.sendMessageInt(2);
+
+                setActivatedButton(
+                        new SimpleBooleanProperty(true)
+                );
+
+                getBulletButton().setText(
+                        getActivatedButton().get()
+                                ? "Presiona"
+                                : "Esperando..."
+                );
+
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+
+        });
+
+        try {
+            hiloEscuchando.wait();
+        }catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+
+        hiloEscuchando.start();
+
     }
 }
