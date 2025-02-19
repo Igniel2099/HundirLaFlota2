@@ -2,6 +2,7 @@ package org.example.hundirlaflota2.ServidorCliente;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -31,44 +32,52 @@ public class Servidor {
             DataInputStream inTwo = new DataInputStream(SocketTwo.getInputStream());
             DataOutputStream outTwo = new DataOutputStream(SocketTwo.getOutputStream());
 
-            outOne.writeUTF("Te has conectado al servidor :)");
-            outTwo.writeUTF("Te has conectado al servidor :)");
+            sendPrimaryMessageServer(outOne, outTwo);
 
-            System.out.println("Conectado dos personas al servidor");
+            System.out.println("Conectadas dos personas al servidor");
 
+            // Las Ventanas se comunican entre ellas para saber que no he perdido la conexión
+            // y son 3 iteraciones porque son 3 ventanas
             for (int i = 0; i < 3; i++) {
-                String msOne = inOne.readUTF();
-                String msTwo = inTwo.readUTF();
-
-                System.out.println(msOne + "\n" + msTwo);
-
-                outTwo.writeUTF(msOne);
-                outOne.writeUTF(msTwo);
-
+                sendMessageBetweenToWindows(inOne,inTwo,outOne,outTwo);
             }
 
             // Elección de personajes uno ataca y otro recibe
-            List<String> listaAcciones = new ArrayList<>(
+            List<String> listActions = new ArrayList<>(
                     Arrays.asList(
                             "Atacas",
                             "Esperas"
                     )
             );
 
+            List<DataInputStream> listInputs = new ArrayList<>(
+                    Arrays.asList(
+                            inOne,
+                            inTwo
+                    )
+            );
+
+            List<DataOutputStream> listOutputs = new ArrayList<>(
+                    Arrays.asList(
+                            outOne,
+                            outTwo
+                    )
+            );
+
+            // Este es el primer mensaje para recibir el estado inicial del botón
+            outOne.writeUTF(listActions.getFirst());
+            outTwo.writeUTF(listActions.getLast());
             for (int i = 0; i < 3; i++){
-                outOne.writeUTF(listaAcciones.getFirst());
-                outTwo.writeUTF(listaAcciones.getLast());
+                outOne.writeUTF(listActions.getFirst());
+                outTwo.writeUTF(listActions.getLast());
 
                 //------------------------------Turno------------------------------
                 // Ataca el Atacante y le manda el Ataque al que Espera
-                String messageAtacante = inOne.readUTF();
-                outTwo.writeUTF(messageAtacante);
-                // El que Espera manda la respuesta de que toco al Atacante
-                int respuestaEsperador = inTwo.readInt();
-                outOne.writeInt(respuestaEsperador);
+                shiftControlGame(listInputs,listOutputs);
 
-                String primerElemento = listaAcciones.removeFirst();
-                listaAcciones.add(primerElemento);
+                String primerElemento = listActions.removeFirst();
+                listActions.add(primerElemento);
+
             }
 
 
@@ -76,5 +85,43 @@ public class Servidor {
             System.out.println("Error en el servidor: " + e.getMessage());
         }
 
+    }
+
+    private static void sendPrimaryMessageServer(
+            DataOutputStream outOne,
+            DataOutputStream outTwo) throws IOException
+    {
+        outOne.writeUTF("Te has conectado al servidor :)");
+        outTwo.writeUTF("Te has conectado al servidor :)");
+    }
+
+    private static void sendMessageBetweenToWindows(
+            DataInputStream inOne,
+            DataInputStream inTwo,
+            DataOutputStream outOne,
+            DataOutputStream outTwo) throws IOException {
+        String msOne = inOne.readUTF();
+        String msTwo = inTwo.readUTF();
+
+        System.out.println(msOne + "\n" + msTwo);
+
+        outTwo.writeUTF(msOne);
+        outOne.writeUTF(msTwo);
+    }
+
+    private static void shiftControlGame(
+            List<DataInputStream> listInputs,
+            List<DataOutputStream> listOutputs
+    )throws IOException{
+        String messageAtacante = listInputs.getFirst().readUTF();
+        listOutputs.getLast().writeUTF(messageAtacante);
+        // El que Espera manda la respuesta de que toco al Atacante
+        int respuestaEsperador = listInputs.getLast().readInt();
+        listOutputs.getFirst().writeInt(respuestaEsperador);
+
+        DataInputStream primerIn = listInputs.removeFirst();
+        listInputs.add(primerIn);
+        DataOutputStream primerOut = listOutputs.removeFirst();
+        listOutputs.add(primerOut);
     }
 }

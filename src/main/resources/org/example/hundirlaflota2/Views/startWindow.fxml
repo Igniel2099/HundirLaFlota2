@@ -12,5 +12,5 @@
             <Font size="45" />
         </font>
     </Label>
-    <Button layoutX="269.0" layoutY="187.0" text="Presiona" onAction="#handleButtonClick"/>
+    <Button layoutX="269.0" layoutY="187.0" text="Presiona" onAction="#handleButtonClick" fx:id="bulletButton"/>
 </AnchorPane>
