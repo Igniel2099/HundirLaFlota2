@@ -85,7 +85,6 @@ public class Servidor {
         } catch (Exception e) {
             System.out.println("Error en el servidor: " + e.getMessage());
         }
-
     }
 
     private static void sendPrimaryMessageServer(

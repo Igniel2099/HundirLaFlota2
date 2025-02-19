@@ -55,7 +55,7 @@ public class StartWindow  extends FatherWindow {
                     )
             );
 
-            notifyAll();
+            startController.iniciarEscucha();
         }catch (Exception e){
             e.printStackTrace();
         }

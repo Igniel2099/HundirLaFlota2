@@ -77,8 +77,7 @@ public class StartController extends FatherController{
         }
     }
 
-    @FXML
-    public void initialize() {
+    public void iniciarEscucha() {
         Thread hiloEscuchando = new Thread(() -> {
             try{
                 String recibioDisparo = client.receiveMessageString();
@@ -102,12 +101,6 @@ public class StartController extends FatherController{
             }
 
         });
-
-        try {
-            hiloEscuchando.wait();
-        }catch (InterruptedException ex){
-            ex.printStackTrace();
-        }
 
         hiloEscuchando.start();
 
