@@ -52,8 +52,8 @@ public class StartController extends FatherController{
 
     public void turno() throws Exception{
 
-        boolean atacante = client.receiveMessageString().equals("Atacas");
-        if(atacante){
+//        boolean atacante = client.receiveMessageString().equals("Atacas");
+        if(getActivatedButton().get()){
             // El que ataca
             // -x-y-
             // disparo provisional

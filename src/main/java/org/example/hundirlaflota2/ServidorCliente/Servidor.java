@@ -66,8 +66,7 @@ public class Servidor {
             );
 
             // Este es el primer mensaje para recibir el estado inicial del botón
-            outOne.writeUTF(listActions.getFirst());
-            outTwo.writeUTF(listActions.getLast());
+
             for (int i = 0; i < 3; i++){
                 outOne.writeUTF(listActions.getFirst());
                 outTwo.writeUTF(listActions.getLast());
