@@ -1,5 +1,6 @@
 package org.example.hundirlaflota2.Controllers;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -84,7 +85,7 @@ public class StartController extends FatherController{
 
     @FXML
     public void handleButtonClick(ActionEvent event){
-        System.out.println("Click del disparo" + bulletButton.getText());
+        System.out.println("Click del disparo " + bulletButton.getText());
 
         try{
             turno();
@@ -102,6 +103,27 @@ public class StartController extends FatherController{
                 // Mensaje del que toco provisional
                 client.sendMessageInt(2);
 
+                Platform.runLater(() -> {
+                    try{
+                        setActivatedButton(
+                                new SimpleBooleanProperty(
+                                        client.receiveMessageString().equals("Atacas")
+                                )
+                        );
+                    } catch (IOException ex){
+                        ex.printStackTrace();
+                    }
+
+                    getBulletButton().setText(
+                            getActivatedButton().get()
+                                    ? "Presiona"
+                                    : "Esperando..."
+                    );
+
+                    getBulletButton().setDisable(
+                            !getActivatedButton().get()
+                    );
+                });
 
             }catch (IOException ex){
                 ex.printStackTrace();
@@ -111,25 +133,7 @@ public class StartController extends FatherController{
 
         hiloEscuchando.start();
 
-        try{
-            setActivatedButton(
-                    new SimpleBooleanProperty(
-                            client.receiveMessageString().equals("Atacas")
-                    )
-            );
-        } catch (IOException ex){
-            ex.printStackTrace();
-        }
 
-        getBulletButton().setText(
-                getActivatedButton().get()
-                        ? "Presiona"
-                        : "Esperando..."
-        );
-
-        getBulletButton().setDisable(
-                !getActivatedButton().get()
-        );
 
     }
 }
