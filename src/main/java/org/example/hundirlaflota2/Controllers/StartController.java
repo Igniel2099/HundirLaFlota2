@@ -86,15 +86,6 @@ public class StartController extends FatherController{
                 // Mensaje del que toco provisional
                 client.sendMessageInt(2);
 
-                setActivatedButton(
-                        new SimpleBooleanProperty(true)
-                );
-
-                getBulletButton().setText(
-                        getActivatedButton().get()
-                                ? "Presiona"
-                                : "Esperando..."
-                );
 
             }catch (IOException ex){
                 ex.printStackTrace();
@@ -104,5 +95,15 @@ public class StartController extends FatherController{
 
         hiloEscuchando.start();
 
+        setActivatedButton(
+                new SimpleBooleanProperty(true)
+        );
+
+        getBulletButton().setText(
+                getActivatedButton().get()
+                        ? "Presiona"
+                        : "Esperando..."
+        );
+        
     }
 }
