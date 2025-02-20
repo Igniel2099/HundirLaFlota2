@@ -43,18 +43,6 @@ public class StartWindow  extends FatherWindow {
                     !startController.getActivatedButton().get()
             );
 
-            // hago un addListener para que escuche el cambio de valor del nuevo valor
-//            startController.getActivatedButton().addListener(
-//                    (obs, oldValue, newValue) ->
-//                            startController.getBulletButton().setDisable(newValue)
-//            );
-//
-//            startController.getBulletButton().setOnAction(
-//                    event -> startController.getBulletButton().setDisable(
-//                            !startController.getActivatedButton().get()
-//                    )
-//            );
-
             if (!startController.getActivatedButton().get()) {
                 startController.iniciarEscucha();
             }

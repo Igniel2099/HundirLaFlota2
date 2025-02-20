@@ -60,9 +60,25 @@ public class StartController extends FatherController{
             client.sendMessageString("1,2");
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
-        }else {
-            // El que espera
 
+
+            setActivatedButton(
+                    new SimpleBooleanProperty(
+                            client.receiveMessageString().equals("Atacas")
+                    )
+            );
+
+            getBulletButton().setText(
+                    getActivatedButton().get()
+                            ? "Presiona"
+                            : "Esperando..."
+            );
+
+            getBulletButton().setDisable(
+                    !getActivatedButton().get()
+            );
+
+            iniciarEscucha();
         }
     }
 
@@ -95,15 +111,25 @@ public class StartController extends FatherController{
 
         hiloEscuchando.start();
 
-        setActivatedButton(
-                new SimpleBooleanProperty(true)
-        );
+        try{
+            setActivatedButton(
+                    new SimpleBooleanProperty(
+                            client.receiveMessageString().equals("Atacas")
+                    )
+            );
+        } catch (IOException ex){
+            ex.printStackTrace();
+        }
 
         getBulletButton().setText(
                 getActivatedButton().get()
                         ? "Presiona"
                         : "Esperando..."
         );
-        
+
+        getBulletButton().setDisable(
+                !getActivatedButton().get()
+        );
+
     }
 }
