@@ -33,11 +33,13 @@ public class MainController extends FatherController {
     }
 
     @FXML
-    public void handleButtonClick(ActionEvent event) {
+    public void handleButtonClick(ActionEvent event) throws InterruptedException {
         Button buttonReady = (Button) event.getSource();
         buttonReady.setText("Waiting...");
 
         notifyAndAwaitsResponse(); // Hilo Secundario que no molesta al hilo de la UI
+
+
 
         changeStartWindow();
     }
@@ -49,13 +51,18 @@ public class MainController extends FatherController {
     private void notifyAndAwaitsResponse(){
         new Thread(() -> {
             communicationMw.mainCommunication();
-        });
+        }).start();
     }
 
     /**
      * Este método sirve para cambiar de Scena a StarWindow
      */
-    private void changeStartWindow(){
+    private synchronized void changeStartWindow() throws InterruptedException {
+
+        while (labelOtherPlayer.getText().equals("El otro jugador esta configurando...")) {
+            wait();
+        }
+
         MainApp mainApp = new MainApp();
         mainApp.setFatherWindow(new StartWindow(client));
         try{
@@ -79,10 +86,11 @@ public class MainController extends FatherController {
                 Platform.runLater(() -> {
                     labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
                 });
+                notify();
            } catch (IOException e) {
                throw new RuntimeException(e);
            }
-        });
+        }).start();
     }
 
     /**
