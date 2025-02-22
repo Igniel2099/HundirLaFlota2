@@ -27,4 +27,14 @@ public class Communication {
         return false;
     }
 
+    public void mainCommunication(){
+        try{
+            getClient().sendMessageString("Estoy listo " + getClient().getNombreCliente());
+            System.out.println(getClient().receiveMessageString());
+        }catch(Exception e){
+            System.out.println("--Error en el startCommunication de CommunicationStartWindow: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

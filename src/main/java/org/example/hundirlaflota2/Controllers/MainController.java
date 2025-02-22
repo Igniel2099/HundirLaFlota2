@@ -48,7 +48,7 @@ public class MainController extends FatherController {
      */
     private void notifyAndAwaitsResponse(){
         new Thread(() -> {
-            communicationMw.startCommunication();
+            communicationMw.mainCommunication();
         });
     }
 
