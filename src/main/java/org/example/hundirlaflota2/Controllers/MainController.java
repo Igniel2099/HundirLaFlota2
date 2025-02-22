@@ -60,7 +60,7 @@ public class MainController extends FatherController {
     private synchronized void changeStartWindow() throws InterruptedException {
 
         while (labelOtherPlayer.getText().equals("El otro jugador esta configurando...")) {
-            wait();
+            labelOtherPlayer.wait();
         }
 
         MainApp mainApp = new MainApp();
@@ -77,7 +77,7 @@ public class MainController extends FatherController {
     /**
      * Este es un hilo terciario que siempre va a estar escuchando la respuesta del otro cliente
      */
-    public void threadListens(){
+    public synchronized void threadListens(){
         new Thread(() -> {
             String message = "";
             try{
@@ -86,7 +86,7 @@ public class MainController extends FatherController {
                 Platform.runLater(() -> {
                     labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
                 });
-
+                labelOtherPlayer.notify();
            } catch (IOException e) {
                throw new RuntimeException(e);
            }
