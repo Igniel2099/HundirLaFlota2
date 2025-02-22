@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.hundirlaflota2.Controllers.UploadController">
-
-    <Label layoutX="129.0" layoutY="14.0" text="Upload Window">
-        <font>
-            <Font size="48" />
-        </font>
-    </Label>
-    <Button layoutX="266.0" layoutY="187.0" text="Cargando" onAction="#handleButtonClick"/>
-
-</AnchorPane>
+<StackPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="750.0"
+        prefWidth="1200.0"
+        xmlns="http://javafx.com/javafx/23.0.1"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.example.hundirlaflota2.Controllers.UploadController">
+    <children>
+        <ImageView fitHeight="780.0" fitWidth="1250.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../Images/BackgroundMain.png" />
+            </image>
+        </ImageView>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <ImageView fx:id="imageViewRotate" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="545.0" AnchorPane.topAnchor="275.0">
+                    <image>
+                        <Image url="@../Images/imageUpload.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="494.0" layoutY="425.0" text="Buscando Jugadores...">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

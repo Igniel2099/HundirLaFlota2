@@ -1,6 +1,5 @@
 package org.example.hundirlaflota2.Windows;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import org.example.hundirlaflota2.Communication.CommunicationStartWindow;
