@@ -10,5 +10,5 @@ module org.example.hundirlaflota2 {
     exports org.example.hundirlaflota2.Windows;
     exports org.example.hundirlaflota2.Controllers;
     exports org.example.hundirlaflota2.ServidorCliente;
-    exports org.example.hundirlaflota2.Communication;
+    exports org.example.hundirlaflota2.Service;
 }

@@ -15,11 +15,9 @@ public class Servidor {
         Socket SocketOne = null;
         Socket SocketTwo = null;
 
-
         final int PUERTO = 5000;
 
         try (ServerSocket serverSocket = new ServerSocket(PUERTO)){
-
 
             System.out.println("Servidor conectado");
 
@@ -40,6 +38,13 @@ public class Servidor {
             // y son 3 iteraciones porque son 3 ventanas
             for (int i = 0; i < 3; i++) {
                 sendMessageBetweenToWindows(inOne,inTwo,outOne,outTwo);
+                if (i == 1) {
+                    String messageFirst = inOne.readUTF();
+                    System.out.println(messageFirst);
+                    outTwo.writeUTF(messageFirst);
+                    String messageSecond = inTwo.readUTF();
+                    outOne.writeUTF(messageSecond);
+                }
             }
 
             // Elección de personajes uno ataca y otro recibe

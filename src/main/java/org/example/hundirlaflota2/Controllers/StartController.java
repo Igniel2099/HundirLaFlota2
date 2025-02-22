@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import org.example.hundirlaflota2.Communication.CommunicationStartWindow;
+import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
 import java.io.IOException;
@@ -14,13 +14,13 @@ import java.io.IOException;
 public class StartController extends FatherController{
 
     private Cliente client;
-    private CommunicationStartWindow communicationSw;
+    private Communication communicationSw;
     private BooleanProperty activatedButton;
 
     @FXML
     private Button bulletButton;
 
-    public void setCommunicationSw(CommunicationStartWindow communicationSw) {
+    public void setCommunicationSw(Communication communicationSw) {
         this.communicationSw = communicationSw;
     }
 

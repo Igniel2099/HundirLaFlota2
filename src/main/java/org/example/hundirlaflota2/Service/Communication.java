@@ -1,8 +1,8 @@
-package org.example.hundirlaflota2.Communication;
+package org.example.hundirlaflota2.Service;
 
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
-public class CommunicationStartWindow {
+public class Communication {
 
     private final Cliente client;
 
@@ -10,7 +10,7 @@ public class CommunicationStartWindow {
         return client;
     }
 
-    public CommunicationStartWindow(Cliente client) {
+    public Communication(Cliente client) {
         this.client = client;
     }
 
