@@ -69,7 +69,14 @@ public class UploadController extends FatherController {
         // Iniciar la animación
         timeline.play();
 
-        new Thread(this::initSecondThread).start();
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                initSecondThread();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
     }
 
