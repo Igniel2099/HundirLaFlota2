@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.example.hundirlaflota2.Communication.CommunicationStartWindow;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
 import java.io.IOException;
@@ -13,17 +14,18 @@ import java.io.IOException;
 public class StartController extends FatherController{
 
     private Cliente client;
+    private CommunicationStartWindow communicationSw;
     private BooleanProperty activatedButton;
 
     @FXML
     private Button bulletButton;
 
-    public Button getBulletButton() {
-        return bulletButton;
+    public void setCommunicationSw(CommunicationStartWindow communicationSw) {
+        this.communicationSw = communicationSw;
     }
 
-    public void setBulletButton(Button bulletButton) {
-        this.bulletButton = bulletButton;
+    public Button getBulletButton() {
+        return bulletButton;
     }
 
     public BooleanProperty getActivatedButton() {
@@ -41,19 +43,36 @@ public class StartController extends FatherController{
     public void setClient(Cliente client) {
         this.client = client;
     }
-    public void sendMessageClint(){
-        try{
-            client.sendMessageString("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en StartWindow");
 
-        }catch(Exception e){
-            System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());
+    public void initCommunication(){
+        try {
+            setActivatedButton(
+                    new SimpleBooleanProperty(
+                            communicationSw.startCommunication()
+                    )
+            );
+
+            getBulletButton().disableProperty().bind(getActivatedButton().not());
+
+            System.out.println("Turno " + getActivatedButton());
+
+
+            getBulletButton().setText(
+                    getActivatedButton().get()
+                            ? "Presiona"
+                            : "Esperando..."
+            );
+
+            if (!getActivatedButton().get()) {
+                iniciarEscucha();
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     public void turno() throws Exception{
 
-//        boolean atacante = client.receiveMessageString().equals("Atacas");
         if(getActivatedButton().get()){
             // El que ataca
             // -x-y-
@@ -62,21 +81,14 @@ public class StartController extends FatherController{
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
 
-
-            setActivatedButton(
-                    new SimpleBooleanProperty(
-                            client.receiveMessageString().equals("Atacas")
-                    )
+            getActivatedButton().set(
+                client.receiveMessageString().equals("Atacas")
             );
 
             getBulletButton().setText(
                     getActivatedButton().get()
                             ? "Presiona"
                             : "Esperando..."
-            );
-
-            getBulletButton().setDisable(
-                    !getActivatedButton().get()
             );
 
             iniciarEscucha();
@@ -105,10 +117,9 @@ public class StartController extends FatherController{
 
                 Platform.runLater(() -> {
                     try{
-                        setActivatedButton(
-                                new SimpleBooleanProperty(
-                                        client.receiveMessageString().equals("Atacas")
-                                )
+
+                        getActivatedButton().set(
+                            client.receiveMessageString().equals("Atacas")
                         );
                     } catch (IOException ex){
                         ex.printStackTrace();
@@ -120,9 +131,6 @@ public class StartController extends FatherController{
                                     : "Esperando..."
                     );
 
-                    getBulletButton().setDisable(
-                            !getActivatedButton().get()
-                    );
                 });
 
             }catch (IOException ex){
@@ -132,8 +140,10 @@ public class StartController extends FatherController{
         });
 
         hiloEscuchando.start();
+    }
 
-
-
+    @FXML
+    public void initialize(){
+        // Nada de Momento
     }
 }
