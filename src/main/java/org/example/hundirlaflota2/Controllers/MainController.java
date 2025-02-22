@@ -86,7 +86,7 @@ public class MainController extends FatherController {
                 Platform.runLater(() -> {
                     labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
                 });
-                notify();
+
            } catch (IOException e) {
                throw new RuntimeException(e);
            }
