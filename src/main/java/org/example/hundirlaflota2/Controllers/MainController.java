@@ -20,6 +20,9 @@ public class MainController extends FatherController {
     @FXML
     private Label labelOtherPlayer;
 
+    @FXML
+    private Button buttonAction;
+
     public void setCommunicationMw(Communication communicationMw) {
         this.communicationMw = communicationMw;
     }
@@ -37,18 +40,22 @@ public class MainController extends FatherController {
         Button buttonReady = (Button) event.getSource();
         buttonReady.setText("Waiting...");
 
-        notifyAndAwaitsResponse(); // Hilo Secundario que no molesta al hilo de la UI
+        notifyReady(); // Hilo Secundario que no molesta al hilo de la UI
+
+
+        if(labelOtherPlayer.getText().equals("El otro jugador ha terminado de configurar sus barcos.")){
+            changeStartWindow();
+        }
 
 
 
-        changeStartWindow();
+        System.out.println("Click en el boton y ejecutada toda su funcionalidad");
     }
 
     /**
-     * Este método sirve para notificar al otro cliente que estoy listo y ademas
-     * espero al respuesta de otro cliente.
+     * Este método sirve para notificar al otro cliente que estoy listo
      */
-    private void notifyAndAwaitsResponse(){
+    private void notifyReady(){
         new Thread(() -> {
             communicationMw.mainCommunication();
         }).start();
@@ -57,11 +64,7 @@ public class MainController extends FatherController {
     /**
      * Este método sirve para cambiar de Scena a StarWindow
      */
-    private synchronized void changeStartWindow() throws InterruptedException {
-
-        while (labelOtherPlayer.getText().equals("El otro jugador esta configurando...")) {
-            labelOtherPlayer.wait();
-        }
+    private synchronized void changeStartWindow() {
 
         MainApp mainApp = new MainApp();
         mainApp.setFatherWindow(new StartWindow(client));
@@ -86,7 +89,6 @@ public class MainController extends FatherController {
                 Platform.runLater(() -> {
                     labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
                 });
-                labelOtherPlayer.notify();
            } catch (IOException e) {
                throw new RuntimeException(e);
            }
@@ -110,7 +112,12 @@ public class MainController extends FatherController {
 
     @FXML
     public void initialize() {
-
+        labelOtherPlayer.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("El texto cambió de: " + oldValue + " a: " + newValue);
+            if(labelOtherPlayer.equals("El otro jugador ha terminado de configurar sus barcos.") && buttonAction.getText().equals("Waiting...")){
+                changeStartWindow();
+            }
+        });
     }
 
 

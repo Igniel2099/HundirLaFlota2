@@ -6,7 +6,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.hundirlaflota2.Controllers.MainController">
 
-    <Button layoutX="262.0" layoutY="262.0" mnemonicParsing="false" onAction="#handleButtonClick" text="Button" />
+    <Button fx:id="buttonAction" layoutX="262.0" layoutY="262.0" mnemonicParsing="false" onAction="#handleButtonClick" text="Button" />
     <Label layoutX="148.0" layoutY="14.0" text="Main Window">
         <font>
           <Font size="43.0" />
