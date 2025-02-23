@@ -114,7 +114,7 @@ public class MainController extends FatherController {
     public void initialize() {
         labelOtherPlayer.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("El texto cambió de: " + oldValue + " a: " + newValue);
-            if(labelOtherPlayer.equals("El otro jugador ha terminado de configurar sus barcos.") && buttonAction.getText().equals("Waiting...")){
+            if(labelOtherPlayer.getText().equals("El otro jugador ha terminado de configurar sus barcos.") && buttonAction.getText().equals("Waiting...")){
                 changeStartWindow();
             }
         });
