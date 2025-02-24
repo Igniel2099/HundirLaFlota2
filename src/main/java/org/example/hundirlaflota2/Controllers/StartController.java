@@ -105,8 +105,8 @@ public class StartController extends FatherController{
             e.printStackTrace();
         }
     }
-
     public void iniciarEscucha() {
+
         Thread hiloEscuchando = new Thread(() -> {
             try{
                 String recibioDisparo = client.receiveMessageString();
