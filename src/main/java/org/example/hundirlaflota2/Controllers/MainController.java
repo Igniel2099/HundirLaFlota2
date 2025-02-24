@@ -17,6 +17,7 @@ import org.example.hundirlaflota2.Windows.StartWindow;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class MainController extends FatherController {
 
@@ -89,9 +90,6 @@ public class MainController extends FatherController {
                 changeStartWindow();
             }
         });
-
-
-
     }
 
     /**
@@ -120,25 +118,35 @@ public class MainController extends FatherController {
     }
 
     /**
-     * Este es un hilo terciario que siempre va a estar escuchando la respuesta del otro cliente
+     * Este es un hilo secundario que siempre va a estar escuchando la respuesta del otro cliente.
+     * Utilizo CompletableFuture.runAsync junto con un While(true) para asegurarme de que este hilo
+     * se ejecuta de manera asíncrona al hilo principal que es la UI.
+     * Con el Thread No funciona bien, porque se ejecutaba de manera síncrona, o sea, se ejecutaba después de
+     * que la UI terminara su trabajo
      */
     public void threadListens() {
-        new Thread(() -> {
+        CompletableFuture.runAsync(() -> {
             String message = "";
             try{
                 System.out.println("Estoy Escuchando");
+                while (true)
+                {
+                    message = client.receiveMessageString();
+                    System.out.println("Mensaje del otro cliente" + message);
+                    Platform.runLater(() -> {
+                        labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
+                    });
 
-                message = client.receiveMessageString();
-                System.out.println("Mensaje del otro cliente" + message);
-                Platform.runLater(() -> {
-                    labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
-                });
+                    if (message != null) {
+                        break;
+                    }
+                }
 
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
     }
 
     // Tengo que refactorizar
