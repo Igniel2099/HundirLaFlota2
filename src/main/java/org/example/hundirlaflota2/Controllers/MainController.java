@@ -74,15 +74,13 @@ public class MainController extends FatherController {
         this.client = client;
     }
 
-
-    @FXML
-    public void initialize() {
-        //
+    private void initMatrix() {
         ConvertMatrix convertMatrix = new ConvertMatrix();
         convertMatrix.buildGridPaneWithPaneWater(myGrid);
         setEventToPane();
+    }
 
-        // inicializo el listener del label :)
+    private void initListenerLabel(){
         labelOtherPlayer.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("El texto cambió de: " + oldValue + " a: " + newValue);
             labelChanged = true;
@@ -90,6 +88,14 @@ public class MainController extends FatherController {
                 changeStartWindow();
             }
         });
+    }
+
+    @FXML
+    public void initialize() {
+
+        initMatrix();
+        // inicializo el listener del label :)
+        initListenerLabel();
     }
 
     /**
@@ -118,11 +124,11 @@ public class MainController extends FatherController {
     }
 
     /**
-     * Este es un hilo secundario que siempre va a estar escuchando la respuesta del otro cliente.
+     * Este es un hilo terciario que siempre va a estar escuchando la respuesta del otro cliente
      * Utilizo CompletableFuture.runAsync junto con un While(true) para asegurarme de que este hilo
      * se ejecuta de manera asíncrona al hilo principal que es la UI.
-     * Con el Thread No funciona bien, porque se ejecutaba de manera síncrona, o sea, se ejecutaba después de
-     * que la UI terminara su trabajo
+     * Con el Thread No funciona bien, porque se ejecutaba de manera síncrona, osea, se ejecutaba después de
+     * la UI terminara su trabajo
      */
     public void threadListens() {
         CompletableFuture.runAsync(() -> {
@@ -134,19 +140,27 @@ public class MainController extends FatherController {
                     message = client.receiveMessageString();
                     System.out.println("Mensaje del otro cliente" + message);
                     Platform.runLater(() -> {
-                        labelOtherPlayer.setText("El otro jugador ha terminado de configurar sus barcos.");
+                        labelOtherPlayer.setText("El otro jugador termino");
                     });
 
                     if (message != null) {
                         break;
                     }
                 }
-
-
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    /**
+     * Este método deshabilita el evento del botón, le cambia la imagen y le quita sus estilos
+     * @param imageButton Espera el ImageView que sirve de Botón en la Pantalla
+     */
+    private  void DisableButtonVisuals(ImageView imageButton) {
+        imageButton.setImage(new Image(getClass().getResource("/org/example/hundirlaflota2/Images/buttonWaiting.png").toExternalForm()));
+        imageButton.setOnMouseClicked(null);
+        imageButton.getStyleClass().clear();
     }
 
     // Tengo que refactorizar
@@ -156,16 +170,11 @@ public class MainController extends FatherController {
                 quantityShipThree.getText().equals("0") &&
                 quantityShipTwo.getText().equals("0")) {
 
-            ImageView imageButtonReady = (ImageView) event.getSource();
-
-            imageButtonReady = new ImageView(new Image(getClass().getResource("/org/example/hundirlaflota2/Images/buttonWaiting.png").toExternalForm()));
+            DisableButtonVisuals((ImageView) event.getSource()); // Deshabilita weas del botón
 
             buttonActionPressed = true;
-            System.out.println("imageButtonReady ha sido pulsado y esta esperando....");
 
-            System.out.println("Ha terminado");
-            // Debería deshabilitarlo
-
+            // Esto es un Debug que puedo borrar
             System.out.println("Lista de todas las coordenadas de los barcos:");
             for (List<Integer[]> list : listAllCoordinates) {
                 System.out.println("listas");
@@ -173,16 +182,13 @@ public class MainController extends FatherController {
                     System.out.println(Arrays.toString(integers));
                 }
             }
-
-            // Se ve que está lista se la pasa al StartWindow para recolocar todos los barcos en el otro sitio
-
             notifyReady(); // Hilo Secundario que no molesta al hilo de la UI
 
+            // Se ve que está lista se la pasa al StartWindow para recolocar todos los barcos en el otro sitio
             if(labelChanged) {
                 changeStartWindow(); // Aquí debería pasarle por parametro la lista de coordenadas
             }
-
-            System.out.println("Click en el botón y ejecutada toda su funcionalidad");
+            System.out.println("imageButtonReady ha sido pulsado y esta esperando....");
         }
     }
 
