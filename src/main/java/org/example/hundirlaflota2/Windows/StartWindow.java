@@ -6,7 +6,7 @@ import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.Controllers.StartController;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
-public class StartWindow  extends FatherWindow {
+public class StartWindow extends FatherWindow {
 
     public Cliente cliente;
     private final Communication communicationSw;

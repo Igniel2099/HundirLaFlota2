@@ -17,27 +17,15 @@ public class StartController extends FatherController{
     private Communication communicationSw;
     private BooleanProperty activatedButton;
 
+    public boolean isActivatedButton() {
+        return activatedButton.get();
+    }
+
     @FXML
     private Button bulletButton;
 
     public void setCommunicationSw(Communication communicationSw) {
         this.communicationSw = communicationSw;
-    }
-
-    public Button getBulletButton() {
-        return bulletButton;
-    }
-
-    public BooleanProperty getActivatedButton() {
-        return activatedButton;
-    }
-
-    public void setActivatedButton(BooleanProperty activatedButton) {
-        this.activatedButton = activatedButton;
-    }
-
-    public Cliente getClient() {
-        return client;
     }
 
     public void setClient(Cliente client) {
@@ -46,24 +34,22 @@ public class StartController extends FatherController{
 
     public void initCommunication(){
         try {
-            setActivatedButton(
-                    new SimpleBooleanProperty(
-                            communicationSw.startCommunication()
-                    )
+            activatedButton = new SimpleBooleanProperty(
+                communicationSw.startCommunication()
             );
 
-            getBulletButton().disableProperty().bind(getActivatedButton().not());
+            bulletButton.disableProperty().bind(activatedButton.not());
 
-            System.out.println("Turno " + getActivatedButton());
+            System.out.println("Turno " + activatedButton);
 
 
-            getBulletButton().setText(
-                    getActivatedButton().get()
+            bulletButton.setText(
+                    activatedButton.get()
                             ? "Presiona"
                             : "Esperando..."
             );
 
-            if (!getActivatedButton().get()) {
+            if (!activatedButton.get()) {
                 iniciarEscucha();
             }
         }catch (Exception e){
@@ -73,7 +59,7 @@ public class StartController extends FatherController{
 
     public void turno() throws Exception{
 
-        if(getActivatedButton().get()){
+        if(activatedButton.get()){
             // El que ataca
             // -x-y-
             // disparo provisional
@@ -81,12 +67,12 @@ public class StartController extends FatherController{
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
 
-            getActivatedButton().set(
+            activatedButton.set(
                 client.receiveMessageString().equals("Atacas")
             );
 
-            getBulletButton().setText(
-                    getActivatedButton().get()
+            bulletButton.setText(
+                    activatedButton.get()
                             ? "Presiona"
                             : "Esperando..."
             );
@@ -118,15 +104,15 @@ public class StartController extends FatherController{
                 Platform.runLater(() -> {
                     try{
 
-                        getActivatedButton().set(
+                        activatedButton.set(
                             client.receiveMessageString().equals("Atacas")
                         );
                     } catch (IOException ex){
                         ex.printStackTrace();
                     }
 
-                    getBulletButton().setText(
-                            getActivatedButton().get()
+                    bulletButton.setText(
+                            activatedButton.get()
                                     ? "Presiona"
                                     : "Esperando..."
                     );
