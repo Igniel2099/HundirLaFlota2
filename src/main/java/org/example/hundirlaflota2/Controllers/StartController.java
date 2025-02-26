@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+
 public class StartController extends FatherController{
     // cliente y comunicaciones
     private Cliente client;
@@ -89,7 +90,12 @@ public class StartController extends FatherController{
             // El que ataca
             // -x-y-
             // disparo provisional
-            client.sendMessageString("1,2");
+            if (positionGang == null || positionGang.size() > 2) {
+                throw new Exception("Que pex cabrón eres imbecil o no saber elegir por eso te dejaron mmhv");
+            }
+
+            client.sendMessageString(positionGang.getFirst() + "," + positionGang.getLast());
+
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
 
@@ -124,16 +130,31 @@ public class StartController extends FatherController{
             System.out.println("Turno " + activatedButton + " por lo que no puedes");
         }
     }
+
+    public int searchCoordinatesWithGang(String gang){
+        String[] coords = gang.split(",");
+        int[] coordinates = {Integer.parseInt(coords[0]), Integer.parseInt(coords[1]) };
+        for (List<Integer[]> list : arraysShips) {
+            for(Integer[] array : list){
+                if (array[0] == coordinates[0] && array[1] == coordinates[1]){
+                    System.out.println("Toco algo ñaño");
+                    return 2; // Toco barco
+                }
+            }
+        }
+        System.out.println("Tocaste agua ñaño");
+        return 3; // Toca agua
+    }
     
     public void iniciarEscucha() {
 
         Thread hiloEscuchando = new Thread(() -> {
             try{
                 String disparoRecibido = client.receiveMessageString();
-
                 System.out.println("El disparo es: " + disparoRecibido);
                 // Mensaje del que toco provisional
-                client.sendMessageInt(2);
+                int loqQueToco = searchCoordinatesWithGang(disparoRecibido);
+                client.sendMessageInt(loqQueToco);
 
                 Platform.runLater(() -> {
                     try{
