@@ -26,7 +26,7 @@ public class MainController extends FatherController {
 
     private Integer shipSpace;
     private List<Integer[]> listCoordinates = new ArrayList<>();
-    private List<List<Integer[]>> listAllCoordinates = new ArrayList<>();
+    private final List<List<Integer[]>> listAllCoordinates = new ArrayList<>();
 
     @FXML
     private Label quantityShipFour;
@@ -85,7 +85,7 @@ public class MainController extends FatherController {
             System.out.println("El texto cambió de: " + oldValue + " a: " + newValue);
             labelChanged = true;
             if(buttonActionPressed) {
-                changeStartWindow();
+                changeStartWindow(listAllCoordinates);
             }
         });
     }
@@ -110,10 +110,10 @@ public class MainController extends FatherController {
     /**
      * Este método sirve para cambiar de Scena a StarWindow
      */
-    private void changeStartWindow() {
+    private void changeStartWindow(List<List<Integer[]>> listCoordinates) {
 
         MainApp mainApp = new MainApp();
-        mainApp.setFatherWindow(new StartWindow(client));
+        mainApp.setFatherWindow(new StartWindow(client,listCoordinates));
         try{
             mainApp.start(getStage());
 
@@ -186,7 +186,7 @@ public class MainController extends FatherController {
 
             // Se ve que está lista se la pasa al StartWindow para recolocar todos los barcos en el otro sitio
             if(labelChanged) {
-                changeStartWindow(); // Aquí debería pasarle por parametro la lista de coordenadas
+                changeStartWindow(listAllCoordinates); // Aquí debería pasarle por parametro la lista de coordenadas
             }
             System.out.println("imageButtonReady ha sido pulsado y esta esperando....");
         }
