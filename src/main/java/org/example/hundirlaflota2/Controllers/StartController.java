@@ -3,13 +3,15 @@ package org.example.hundirlaflota2.Controllers;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class StartController extends FatherController{
 
@@ -17,12 +19,8 @@ public class StartController extends FatherController{
     private Communication communicationSw;
     private BooleanProperty activatedButton;
 
-    public boolean isActivatedButton() {
-        return activatedButton.get();
-    }
-
     @FXML
-    private Button bulletButton;
+    private ImageView bulletButton;
 
     public void setCommunicationSw(Communication communicationSw) {
         this.communicationSw = communicationSw;
@@ -38,22 +36,22 @@ public class StartController extends FatherController{
                 communicationSw.startCommunication()
             );
 
-            bulletButton.disableProperty().bind(activatedButton.not());
-
             System.out.println("Turno " + activatedButton);
 
-
-            bulletButton.setText(
+            bulletButton.setImage(
                     activatedButton.get()
-                            ? "Presiona"
-                            : "Esperando..."
+                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
+                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
             );
 
             if (!activatedButton.get()) {
                 iniciarEscucha();
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (Exception e) {
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 
@@ -71,10 +69,10 @@ public class StartController extends FatherController{
                 client.receiveMessageString().equals("Atacas")
             );
 
-            bulletButton.setText(
+            bulletButton.setImage(
                     activatedButton.get()
-                            ? "Presiona"
-                            : "Esperando..."
+                            ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
+                            : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
             );
 
             iniciarEscucha();
@@ -82,13 +80,20 @@ public class StartController extends FatherController{
     }
 
     @FXML
-    public void handleButtonClick(ActionEvent event){
-        System.out.println("Click del disparo " + bulletButton.getText());
-
-        try{
-            turno();
-        }catch(Exception e){
-            e.printStackTrace();
+    public void pressedGang(MouseEvent event){
+        ImageView imageView = (ImageView) event.getSource();
+        System.out.println("Click del disparo " + imageView.getImage().getUrl());
+        if (activatedButton.get()) {
+            try{
+                turno();
+            }catch(Exception e){
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
+            }
+        }else{
+            System.out.println("Turno " + activatedButton + " por lo que no puedes");
         }
     }
     public void iniciarEscucha() {
@@ -107,20 +112,26 @@ public class StartController extends FatherController{
                         activatedButton.set(
                             client.receiveMessageString().equals("Atacas")
                         );
-                    } catch (IOException ex){
-                        ex.printStackTrace();
+                    } catch (IOException e){
+                        System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                        for (StackTraceElement element : e.getStackTrace()) {
+                            System.err.println("\tat " + element);
+                        }
                     }
 
-                    bulletButton.setText(
+                    bulletButton.setImage(
                             activatedButton.get()
-                                    ? "Presiona"
-                                    : "Esperando..."
+                                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
+                                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
                     );
 
                 });
 
-            }catch (IOException ex){
-                ex.printStackTrace();
+            }catch (IOException e){
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
             }
 
         });
