@@ -39,11 +39,11 @@ public class StartController extends FatherController{
     @FXML
     private ImageView bulletButton;
 
-    // Mi Grid de mis barcos
+    // Grid Enemigo
     @FXML
     private GridPane yourGrid;
 
-    // Grid Enemigo
+    // Mi Grid de mis barcos
     @FXML
     private GridPane myGrid;
 
@@ -145,7 +145,44 @@ public class StartController extends FatherController{
         System.out.println("Tocaste agua ñaño");
         return 3; // Toca agua
     }
-    
+
+    private void changeGridWithGang(String gang, int queToque) throws Exception {
+        String[] coords = gang.split(",");
+        int[] coordinates = {Integer.parseInt(coords[0]), Integer.parseInt(coords[1]) };
+
+        Node nodoARemover = null;
+        for (Node node : yourGrid.getChildren()) {
+            if (GridPane.getColumnIndex(node) == coordinates[0] && GridPane.getRowIndex(node) == coordinates[1]) {
+                nodoARemover = node; // Encontramos el nodo que queremos reemplazar
+                break;
+            }
+        }
+
+        if (nodoARemover != null) {
+            yourGrid.getChildren().remove(nodoARemover); // Eliminamos el Pane
+
+            // Crear un nuevo ImageView con la imagen correspondiente
+            ImageView imageView = new ImageView(
+                    queToque == 3
+                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/water.png")).toExternalForm())
+                    : queToque == 2
+                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/take.png")).toExternalForm())
+                    : null
+            );
+
+            if (imageView.getImage() == null)
+            {
+                throw new Exception("No tengo registrado esto que has tocado");
+            }
+
+            imageView.setFitWidth(37.6); // Ajustar tamaño según necesites
+            imageView.setFitHeight(36.8);
+
+            // Agregar el ImageView en la misma posición (x, y)
+            yourGrid.add(imageView, coordinates[0], coordinates[1]);
+        }
+    }
+
     public void iniciarEscucha() {
 
         Thread hiloEscuchando = new Thread(() -> {
@@ -157,6 +194,16 @@ public class StartController extends FatherController{
                 client.sendMessageInt(loqQueToco);
 
                 Platform.runLater(() -> {
+                    // Actualizar el grid del enemigo
+                    try {
+                        changeGridWithGang(disparoRecibido, loqQueToco);
+                    } catch (Exception e) {
+                        System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                        for (StackTraceElement element : e.getStackTrace()) {
+                            System.err.println("\tat " + element);
+                        }
+                    }
+
                     try{
 
                         activatedButton.set(
@@ -227,7 +274,10 @@ public class StartController extends FatherController{
                 final int finalCol = col;
                 pane.setOnMouseClicked(event -> handleCellClick(event, finalRow, finalCol));
                 pane.getStyleClass().add("pane-style");
-                // Agregar Pane al GridPane
+
+                // Agregar Pane al GridPane y también agrego las coordenadas donde está ubicado el pane
+                GridPane.setRowIndex(yourGrid, finalRow);
+                GridPane.setColumnIndex(yourGrid, finalCol);
                 yourGrid.add(pane, col, row);
             }
         }
@@ -237,6 +287,7 @@ public class StartController extends FatherController{
         ConvertMatrix convertMatrix = new ConvertMatrix();
         myGrid = convertMatrix.reBuildGridPane(arraysShips,myGrid);
     }
+
     @FXML
     public void initialize(){
         paneFillingYourGridPane();
