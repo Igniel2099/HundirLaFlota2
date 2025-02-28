@@ -35,6 +35,9 @@ public class StartController extends FatherController{
     // lista de listas de todas las coordenadas de mis barcos
     private List<List<Integer[]>> arraysShips;
 
+    // Este atributo es el pane que selecciono al disparar
+    private Pane paneSelected;
+
     // botón con el que disparo o espero
     @FXML
     private ImageView bulletButton;
@@ -150,37 +153,31 @@ public class StartController extends FatherController{
         String[] coords = gang.split(",");
         int[] coordinates = {Integer.parseInt(coords[0]), Integer.parseInt(coords[1]) };
 
-        Node nodoARemover = null;
-        for (Node node : yourGrid.getChildren()) {
-            if (GridPane.getColumnIndex(node) == coordinates[0] && GridPane.getRowIndex(node) == coordinates[1]) {
-                nodoARemover = node; // Encontramos el nodo que queremos reemplazar
-                break;
-            }
+        if (paneSelected == null) {
+            throw new Exception("No hay pane seleccionado");
         }
 
-        if (nodoARemover != null) {
-            yourGrid.getChildren().remove(nodoARemover); // Eliminamos el Pane
+        yourGrid.getChildren().remove(paneSelected); // Eliminamos el Pane
 
-            // Crear un nuevo ImageView con la imagen correspondiente
-            ImageView imageView = new ImageView(
-                    queToque == 3
-                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/water.png")).toExternalForm())
-                    : queToque == 2
-                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/take.png")).toExternalForm())
-                    : null
-            );
+        // Crear un nuevo ImageView con la imagen correspondiente
+        ImageView imageView = new ImageView(
+                queToque == 3
+                ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/water.png")).toExternalForm())
+                : queToque == 2
+                ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/take.png")).toExternalForm())
+                : null
+        );
 
-            if (imageView.getImage() == null)
-            {
-                throw new Exception("No tengo registrado esto que has tocado");
-            }
-
-            imageView.setFitWidth(37.6); // Ajustar tamaño según necesites
-            imageView.setFitHeight(36.8);
-
-            // Agregar el ImageView en la misma posición (x, y)
-            yourGrid.add(imageView, coordinates[0], coordinates[1]);
+        if (imageView.getImage() == null)
+        {
+            throw new Exception("No tengo registrado esto que has tocado");
         }
+
+        imageView.setFitWidth(37.6);
+        imageView.setFitHeight(36.8);
+
+        // Agregar el ImageView en la misma posición (x, y)
+        yourGrid.add(imageView, coordinates[0], coordinates[1]);
     }
 
     public void iniciarEscucha() {
@@ -218,8 +215,15 @@ public class StartController extends FatherController{
 
                     bulletButton.setImage(
                             activatedButton.get()
-                                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
-                                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
+                                    ? new Image(Objects.requireNonNull(
+                                            getClass().getResource(
+                                                    "/org/example/hundirlaflota2/Images/buttonBang.png")
+                                    ).toExternalForm())
+
+                                    : new Image(Objects.requireNonNull(
+                                            getClass().getResource(
+                                                    "/org/example/hundirlaflota2/Images/button.png")
+                                    ).toExternalForm())
                     );
 
                 });
@@ -250,17 +254,19 @@ public class StartController extends FatherController{
         return null; // Si no encuentra el Pane
     }
 
+
+
     private void handleCellClick(MouseEvent event, int row, int col) {
         System.out.println("Clic en celda: (" + row + ", " + col + ")");
 
-        if (positionGang!= null){
+        if (positionGang != null){
             Pane pane = getPaneFromGrid(yourGrid,positionGang);
             pane.setStyle("");
         }
 
         positionGang = new ArrayList<>(Arrays.asList(row, col));
-        Pane pane = (Pane) event.getSource();
-        pane.setStyle("-fx-background-color: red");
+        paneSelected = (Pane) event.getSource();
+        paneSelected.setStyle("-fx-background-color: red");
     }
 
     public void paneFillingYourGridPane(){
