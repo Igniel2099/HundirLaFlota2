@@ -241,31 +241,11 @@ public class StartController extends FatherController{
         hiloEscuchando.start();
     }
 
-    public Pane getPaneFromGrid(GridPane grid, List<Integer> position) {
-        int row = position.get(0); // Fila de getPosition
-        int col = position.get(1); // Columna de getPosition
-
-        for (Node node : grid.getChildren()) {
-            if (GridPane.getRowIndex(node) != null && GridPane.getColumnIndex(node) != null) {
-                if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col) {
-                    return (Pane) node; // Retorna el Pane en esa posición
-                }
-            }
-        }
-        return null; // Si no encuentra el Pane
-    }
-
-
-
     private void handleCellClick(MouseEvent event, int row, int col) {
         System.out.println("Clic en celda: (" + row + ", " + col + ")");
 
-        if (positionGang != null){
-            Pane pane = getPaneFromGrid(yourGrid,positionGang);
-            pane.setStyle("");
-        }
-
         positionGang = new ArrayList<>(Arrays.asList(row, col));
+
         paneSelected = (Pane) event.getSource();
         paneSelected.setStyle("-fx-background-color: red");
     }
