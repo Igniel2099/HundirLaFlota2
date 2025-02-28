@@ -276,8 +276,8 @@ public class StartController extends FatherController{
                 pane.getStyleClass().add("pane-style");
 
                 // Agregar Pane al GridPane y también agrego las coordenadas donde está ubicado el pane
-                GridPane.setRowIndex(yourGrid, finalRow);
-                GridPane.setColumnIndex(yourGrid, finalCol);
+                GridPane.setRowIndex(pane, finalRow);
+                GridPane.setColumnIndex(pane, finalCol);
                 yourGrid.add(pane, col, row);
             }
         }
