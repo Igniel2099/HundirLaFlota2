@@ -97,10 +97,18 @@ public class StartController extends FatherController{
                 throw new Exception("Que pex cabrón eres imbecil o no saber elegir por eso te dejaron mmhv");
             }
 
-            client.sendMessageString(positionGang.getFirst() + "," + positionGang.getLast());
+            client.sendMessageString(positionGang.getLast() + "," + positionGang.getFirst());
 
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
+            try {
+                changeGridWithGang(positionGang.getLast() + "," + positionGang.getFirst(), queToque);
+            } catch (Exception e) {
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
+            }
 
             activatedButton.set(
                 client.receiveMessageString().equals("Atacas")
@@ -192,14 +200,7 @@ public class StartController extends FatherController{
 
                 Platform.runLater(() -> {
                     // Actualizar el grid del enemigo
-                    try {
-                        changeGridWithGang(disparoRecibido, loqQueToco);
-                    } catch (Exception e) {
-                        System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
-                        for (StackTraceElement element : e.getStackTrace()) {
-                            System.err.println("\tat " + element);
-                        }
-                    }
+
 
                     try{
 
@@ -282,8 +283,8 @@ public class StartController extends FatherController{
                 pane.getStyleClass().add("pane-style");
 
                 // Agregar Pane al GridPane y también agrego las coordenadas donde está ubicado el pane
-                GridPane.setRowIndex(pane, finalRow);
-                GridPane.setColumnIndex(pane, finalCol);
+//                GridPane.setRowIndex(pane, finalRow);
+//                GridPane.setColumnIndex(pane, finalCol);
                 yourGrid.add(pane, col, row);
             }
         }
