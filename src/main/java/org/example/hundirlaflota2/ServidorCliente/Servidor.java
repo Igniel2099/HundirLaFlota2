@@ -83,7 +83,13 @@ public class Servidor {
                 listActions.add(primerElemento);
             }
 
-
+            // Cerrar todos los inputs, outputs y los sockets
+            outTwo.close();
+            outOne.close();
+            inOne.close();
+            inTwo.close();
+            SocketOne.close();
+            SocketTwo.close();
         } catch (Exception e) {
             System.out.println("Error en el servidor: " + e.getMessage());
         }

@@ -47,7 +47,7 @@ public class VictoryController extends FatherController {
     private void changeLabelWinner(){
 
         String text = ganaste ? "Eres un Ganador" : "Eres un perdedor";
-        text += name;
+        text += " " + name;
         labelWinner.setText(text);
 
     }
