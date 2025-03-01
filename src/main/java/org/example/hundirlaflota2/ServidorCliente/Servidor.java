@@ -70,7 +70,7 @@ public class Servidor {
                     )
             );
 
-            for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 20; i++){ // Es el numero de rondas
                 outOne.writeUTF(listActions.getFirst());
                 outTwo.writeUTF(listActions.getLast());
 

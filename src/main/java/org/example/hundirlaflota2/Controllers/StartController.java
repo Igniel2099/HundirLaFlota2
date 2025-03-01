@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -97,7 +96,7 @@ public class StartController extends FatherController{
                 throw new Exception("Que pex cabrón eres imbecil o no saber elegir por eso te dejaron mmhv");
             }
 
-            client.sendMessageString(positionGang.getLast() + "," + positionGang.getFirst());
+            client.sendMessageString(positionGang.getFirst() + "," + positionGang.getLast());
 
             int queToque = client.receiveMessageInt();
             System.out.println("Lo que toque fue: " + queToque);
@@ -147,6 +146,7 @@ public class StartController extends FatherController{
         int[] coordinates = {Integer.parseInt(coords[0]), Integer.parseInt(coords[1]) };
         for (List<Integer[]> list : arraysShips) {
             for(Integer[] array : list){
+                System.out.println(array[0] + "," + array[1] + "||||" + coords[0] + "," + coords[1]);
                 if (array[0] == coordinates[0] && array[1] == coordinates[1]){
                     System.out.println("Toco algo ñaño");
                     return 2; // Toco barco
@@ -200,10 +200,7 @@ public class StartController extends FatherController{
 
                 Platform.runLater(() -> {
                     // Actualizar el grid del enemigo
-
-
                     try{
-
                         activatedButton.set(
                             client.receiveMessageString().equals("Atacas")
                         );
@@ -215,16 +212,16 @@ public class StartController extends FatherController{
                     }
 
                     bulletButton.setImage(
-                            activatedButton.get()
-                                    ? new Image(Objects.requireNonNull(
-                                            getClass().getResource(
-                                                    "/org/example/hundirlaflota2/Images/buttonBang.png")
-                                    ).toExternalForm())
+                        activatedButton.get()
+                            ? new Image(Objects.requireNonNull(
+                                getClass().getResource(
+                                    "/org/example/hundirlaflota2/Images/buttonBang.png")
+                            ).toExternalForm())
 
-                                    : new Image(Objects.requireNonNull(
-                                            getClass().getResource(
-                                                    "/org/example/hundirlaflota2/Images/button.png")
-                                    ).toExternalForm())
+                            : new Image(Objects.requireNonNull(
+                                getClass().getResource(
+                                    "/org/example/hundirlaflota2/Images/button.png")
+                            ).toExternalForm())
                     );
 
                 });
@@ -244,6 +241,10 @@ public class StartController extends FatherController{
     private void handleCellClick(MouseEvent event, int row, int col) {
         System.out.println("Clic en celda: (" + row + ", " + col + ")");
 
+        // Este if funciona para que solo me muestre en la interfaz un pane rojo a la hora de disparar
+        if (paneSelected != null) {
+            paneSelected.setStyle("");
+        }
         positionGang = new ArrayList<>(Arrays.asList(row, col));
 
         paneSelected = (Pane) event.getSource();
@@ -263,8 +264,6 @@ public class StartController extends FatherController{
                 pane.getStyleClass().add("pane-style");
 
                 // Agregar Pane al GridPane y también agrego las coordenadas donde está ubicado el pane
-//                GridPane.setRowIndex(pane, finalRow);
-//                GridPane.setColumnIndex(pane, finalCol);
                 yourGrid.add(pane, col, row);
             }
         }
