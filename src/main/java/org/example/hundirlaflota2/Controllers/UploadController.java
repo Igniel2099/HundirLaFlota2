@@ -16,6 +16,8 @@ public class UploadController extends FatherController {
     public UploadController(String nameClient) {
         client = new Cliente(nameClient);
     }
+    public UploadController() {
+    }
 
     public Cliente client;
 
