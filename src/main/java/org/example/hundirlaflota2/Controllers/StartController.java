@@ -13,7 +13,6 @@ import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.Service.ConvertMatrix;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
-import org.example.hundirlaflota2.Windows.MainWindow;
 import org.example.hundirlaflota2.Windows.VictoryWindow;
 
 import java.io.IOException;
@@ -241,7 +240,8 @@ public class StartController extends FatherController{
                     // Cambiar de pantalla con el atributo False
                     // porque si entra en esta condicional significa
                     // que ha perdido
-                    changeToMainWindow(false,client.nombreCliente);
+                    Platform.runLater(() -> changeToMainWindow(false,client.nombreCliente));
+
                 }
 
                 Platform.runLater(() -> {

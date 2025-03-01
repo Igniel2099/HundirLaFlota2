@@ -52,10 +52,16 @@ public class VictoryController extends FatherController {
 
     }
 
+    public void changeElementWindow(){
+        changeImageWinner();
+        changeLabelWinner();
+    }
+
     @FXML
     public void initialize() {
         backgroundImageView.fitWidthProperty().bind(fatherPane.widthProperty());
         backgroundImageView.fitHeightProperty().bind(fatherPane.heightProperty());
         backgroundImageView.setPreserveRatio(false);
+        changeElementWindow();
     }
 }
