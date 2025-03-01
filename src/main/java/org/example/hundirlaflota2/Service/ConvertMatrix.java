@@ -32,7 +32,7 @@ public class ConvertMatrix {
         // Remover las celdas individuales
         coords.forEach(coord -> {
             gridPane.getChildren().removeIf(node ->
-                    GridPane.getRowIndex(node) == coord[0] && GridPane.getColumnIndex(node) == coord[1]
+                GridPane.getRowIndex(node) == coord[0] && GridPane.getColumnIndex(node) == coord[1]
             );
         });
 

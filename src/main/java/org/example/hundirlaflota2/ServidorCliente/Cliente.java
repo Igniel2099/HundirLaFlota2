@@ -58,6 +58,9 @@ public class Cliente {
         getOut().writeInt(message);
     }
 
+    public void sendMessageBoolean(boolean message) throws IOException {
+        getOut().writeBoolean(message);
+    }
 
     public String receiveMessageString() throws IOException {
         return (String) getIn().readUTF();
@@ -65,6 +68,10 @@ public class Cliente {
 
     public int receiveMessageInt() throws IOException {
         return getIn().readInt();
+    }
+
+    public boolean receiveMessageBoolean() throws IOException {
+        return getIn().readBoolean();
     }
 
 }

@@ -1,7 +1,6 @@
 package org.example.hundirlaflota2.Windows;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.hundirlaflota2.Controllers.MainController;
 import org.example.hundirlaflota2.Service.Communication;
@@ -29,7 +28,10 @@ public class MainWindow extends FatherWindow {
         try {
             System.out.println(mainController.getClient().receiveMessageString());
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
 
         mainController.threadListens(); // hilo que siempre escucha

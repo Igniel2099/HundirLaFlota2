@@ -102,9 +102,7 @@ public class MainController extends FatherController {
      * Este método sirve para notificar al otro cliente que estoy listo
      */
     private void notifyReady(){
-        new Thread(() -> {
-            communicationMw.mainCommunication();
-        }).start();
+        new Thread(communicationMw::mainCommunication).start();
     }
 
     /**
@@ -118,8 +116,10 @@ public class MainController extends FatherController {
             mainApp.start(getStage());
 
         }catch(Exception e){
-            System.out.println("Error en el MainController, método handleButtonClick: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 
@@ -132,23 +132,19 @@ public class MainController extends FatherController {
      */
     public void threadListens() {
         CompletableFuture.runAsync(() -> {
-            String message = "";
+            String message;
             try{
                 System.out.println("Estoy Escuchando");
-                while (true)
-                {
+                do {
                     message = client.receiveMessageString();
-                    System.out.println("Mensaje del otro cliente" + message);
-                    Platform.runLater(() -> {
-                        labelOtherPlayer.setText("El otro jugador termino");
-                    });
+                    Platform.runLater(() -> labelOtherPlayer.setText("El otro jugador termino"));
 
-                    if (message != null) {
-                        break;
-                    }
-                }
+                } while (message == null);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
             }
         });
     }
@@ -158,7 +154,7 @@ public class MainController extends FatherController {
      * @param imageButton Espera el ImageView que sirve de Botón en la Pantalla
      */
     private  void DisableButtonVisuals(ImageView imageButton) {
-        imageButton.setImage(new Image(getClass().getResource("/org/example/hundirlaflota2/Images/buttonWaiting.png").toExternalForm()));
+        imageButton.setImage(new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonWaiting.png")).toExternalForm()));
         imageButton.setOnMouseClicked(null);
         imageButton.getStyleClass().clear();
     }
@@ -174,21 +170,12 @@ public class MainController extends FatherController {
 
             buttonActionPressed = true;
 
-            // Esto es un Debug que puedo borrar
-            System.out.println("Lista de todas las coordenadas de los barcos:");
-            for (List<Integer[]> list : listAllCoordinates) {
-                System.out.println("listas");
-                for (Integer[] integers : list) {
-                    System.out.println(Arrays.toString(integers));
-                }
-            }
             notifyReady(); // Hilo Secundario que no molesta al hilo de la UI
 
             // Se ve que está lista se la pasa al StartWindow para recolocar todos los barcos en el otro sitio
             if(labelChanged) {
                 changeStartWindow(listAllCoordinates); // Aquí debería pasarle por parametro la lista de coordenadas
             }
-            System.out.println("imageButtonReady ha sido pulsado y esta esperando....");
         }
     }
 
@@ -202,8 +189,10 @@ public class MainController extends FatherController {
             client.sendMessageString("He Cambiado de pantalla soy " + client.getNombreCliente() + "Estoy en MainWindow");
 
         }catch(Exception e){
-            System.out.println("--Error en el sendMessageClient de MainController: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 
@@ -219,8 +208,6 @@ public class MainController extends FatherController {
         map.put(shipFour.getId(),4);
 
         shipSpace = map.get(idShip);
-        System.out.println(idShip);
-        System.out.println(shipSpace);
     }
 
     public List<Integer[]> sorterCords() throws Exception {
@@ -267,7 +254,6 @@ public class MainController extends FatherController {
                 coordinates.add(new Integer[]{row, col}); // ✅ Corrección aquí
             }
         }
-
         return coordinates;
     }
 
@@ -276,11 +262,12 @@ public class MainController extends FatherController {
         try {
             list = getCoordinatesBetween(coords.getFirst(),coords.getLast());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
-        for (Integer[] coord : list) {
-            System.out.println(coord[0] + " " + coord[1]);
-        }
+
         if (list.size() == shipSpace){
             listAllCoordinates.add(list);
         }
@@ -299,7 +286,6 @@ public class MainController extends FatherController {
                         node.setStyle("-fx-background-color:  #2C4080; -fx-border-color: black");
                     }
                 }
-
             }
             return false;
         }
@@ -313,14 +299,12 @@ public class MainController extends FatherController {
     }
 
     private void handleCellClick(MouseEvent event, int row, int col) {
-        System.out.println("Clic en celda: (" + row + ", " + col + ")");
 
         Map<Integer,Label> map = new HashMap<>();
         map.put(4,quantityShipFour);
         map.put(3,quantityShipThree);
         map.put(2,quantityShipTwo);
         map.put(1,quantityShipOne);
-        System.out.println(map.get(shipSpace).getText());
         if (shipSpace != null && !map.get(shipSpace).getText().equals("0")){
             Pane clickedPane = (Pane) event.getSource();
             clickedPane.setStyle("-fx-background-color: blue;"); // Cambia color al hacer clic
@@ -331,13 +315,15 @@ public class MainController extends FatherController {
                     sorterCords();
                     boolean action = mergeCells(myGrid, sorterCords());
                     if (action) {
-                        System.out.println(shipSpace);
 
                         Label electionLabel = map.get(shipSpace);
                         electionLabel.setText(String.valueOf(Integer.parseInt(electionLabel.getText()) - 1));
                     }
                 }catch (Exception e){
-                    e.printStackTrace();
+                    System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        System.err.println("\tat " + element);
+                    }
                 }
                 listCoordinates = new ArrayList<>();
             }

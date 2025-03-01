@@ -26,8 +26,10 @@ public class UploadController extends FatherController {
             client.sendMessageString("Soy client: " + client.getNombreCliente());
             System.out.println("Mensaje recibido del otro cliente" + client.receiveMessageString());
         }catch(Exception e){
-            System.out.println("Error en el clienteStart: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 
@@ -39,8 +41,10 @@ public class UploadController extends FatherController {
             mainApp.start(getStage());
 
         }catch(Exception e){
-            System.out.println("Error en el UploadController: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 
@@ -74,7 +78,10 @@ public class UploadController extends FatherController {
                 Thread.sleep(10); // Tengo que cambiarlo a 3000 ms osea 3 segundos
                 initSecondThread();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
             }
         }).start();
 

@@ -21,8 +21,10 @@ public class Communication {
 
             return getClient().receiveMessageString().equals("Atacas");
         }catch(Exception e){
-            System.out.println("--Error en el startCommunication de CommunicationStartWindow: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
         return false;
     }
@@ -31,8 +33,10 @@ public class Communication {
         try{
             getClient().sendMessageString("Estoy listo " + getClient().getNombreCliente());
         }catch(Exception e){
-            System.out.println("--Error en el startCommunication de CommunicationStartWindow: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
         }
     }
 

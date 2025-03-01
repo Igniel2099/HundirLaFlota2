@@ -70,17 +70,17 @@ public class Servidor {
                     )
             );
 
-            for (int i = 0; i < 20; i++){ // Es el numero de rondas
+            boolean seguirJugando = true;
+            while (seguirJugando){ // Es el numero de rondas
                 outOne.writeUTF(listActions.getFirst());
                 outTwo.writeUTF(listActions.getLast());
 
                 //------------------------------Turno------------------------------
                 // Ataca el Atacante y le manda el Ataque al que Espera
-                shiftControlGame(listInputs,listOutputs);
+                seguirJugando = shiftControlGame(listInputs,listOutputs);
 
                 String primerElemento = listActions.removeFirst();
                 listActions.add(primerElemento);
-
             }
 
 
@@ -111,7 +111,20 @@ public class Servidor {
         outOne.writeUTF(msTwo);
     }
 
-    private static void shiftControlGame(
+    /**
+     * Este método se encarga de obtener el mensaje del atacante y mandárselo al que espera,
+     * el que espera le manda un int sea 3 o 2 para que identifique lo que ha tocado el disparo recibido
+     * y finalmente el atacante manda un booleano al servidor para avisarle si ya ha acertado a 20 veces
+     * o no.
+     * En las dos listas que paso como parámetro son dos listas de dos elementos que contiene como primer elemento
+     * al atacante y el segundo elemento el que espera.
+     * @param listInputs Es una lista de inputs para recibir mensajes
+     * @param listOutputs Es una lista de outputs para mandar mensajes
+     * @throws IOException esta excepción controla los inputs y outputs
+     * @return devuelve el contrario del booleano para determinar la victoria del atacante y que este cierre
+     * el bucle de los turnos de juego
+     */
+    private static boolean shiftControlGame(
             List<DataInputStream> listInputs,
             List<DataOutputStream> listOutputs
     )throws IOException{
@@ -120,10 +133,19 @@ public class Servidor {
         // El que Espera manda la respuesta de que toco al Atacante
         int respuestaEsperador = listInputs.getLast().readInt();
         listOutputs.getFirst().writeInt(respuestaEsperador);
+        // Aquí recibo el booleano de confirmación para saber si ha ganado o no
+        boolean yaGano = listInputs.getFirst().readBoolean();
+        // Aquí le mando el booleano al otro cliente para que sepa si ha perdido
+        listOutputs.getLast().writeBoolean(yaGano);
+
+        // Aquí tengo que mandas un booleano para que ver si el atacante ha ganado y romper él circulo de jugadas
+
 
         DataInputStream primerIn = listInputs.removeFirst();
         listInputs.add(primerIn);
         DataOutputStream primerOut = listOutputs.removeFirst();
         listOutputs.add(primerOut);
+
+        return !yaGano;
     }
 }

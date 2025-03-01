@@ -9,9 +9,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.Service.ConvertMatrix;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
+import org.example.hundirlaflota2.Windows.MainWindow;
+import org.example.hundirlaflota2.Windows.VictoryWindow;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,19 +28,34 @@ public class StartController extends FatherController{
     private Cliente client;
     private Communication communicationSw;
 
-    // booleano que me sirve para saber el estado del botón y de los turnos
+    /**
+     * Un booleano que me sirve para saber el estado del botón y de los turnos
+     */
     private BooleanProperty activatedButton;
 
-    // posición de donde voy a disparar
+    /**
+     * Posición de donde voy a disparar
+     */
     private List<Integer> positionGang;
 
-    // lista de listas de todas las coordenadas de mis barcos
+    /**
+     * Lista de listas de todas las coordenadas de mis barcos
+     */
     private List<List<Integer[]>> arraysShips;
 
-    // Este atributo es el pane que selecciono al disparar
+    /**
+     * Este atributo es el pane que selecciono al disparar
+     */
     private Pane paneSelected;
 
-    // botón con el que disparo o espero
+    /**
+     * Este atributo es un contador que sirve para identificar la cantidad de disparos que has acertado
+     */
+    private int successfulShots;
+
+    /**
+     * Botón con el que disparo o espero
+     */
     @FXML
     private ImageView bulletButton;
 
@@ -59,6 +77,21 @@ public class StartController extends FatherController{
 
     public void setArraysShips(List<List<Integer[]>> arraysShips) {
         this.arraysShips = arraysShips;
+    }
+
+    public void changeToMainWindow(boolean winner, String name){
+        MainApp mainApp = new MainApp();
+        mainApp.setFatherWindow(new VictoryWindow(winner,name));
+        try{
+
+            mainApp.start(getStage());
+
+        }catch(Exception e){
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
+        }
     }
 
     public void initCommunication(){
@@ -99,7 +132,7 @@ public class StartController extends FatherController{
             client.sendMessageString(positionGang.getFirst() + "," + positionGang.getLast());
 
             int queToque = client.receiveMessageInt();
-            System.out.println("Lo que toque fue: " + queToque);
+
             try {
                 changeGridWithGang(positionGang.getLast() + "," + positionGang.getFirst(), queToque);
             } catch (Exception e) {
@@ -108,15 +141,27 @@ public class StartController extends FatherController{
                     System.err.println("\tat " + element);
                 }
             }
+            if (queToque == 2){
+                successfulShots++;
+            }
+
+            // Envia un booleano para saber si ya acertó 20 veces y determinar si ya gano o no
+            boolean yaGane = successfulShots == 2; // --------------------------Cambiar a 20-----------------------------
+            if (yaGane) {
+                System.out.println("Ya ganaste Campeón");
+                changeToMainWindow(true,client.nombreCliente);
+            }
+            client.sendMessageBoolean(yaGane);
+
 
             activatedButton.set(
                 client.receiveMessageString().equals("Atacas")
             );
 
             bulletButton.setImage(
-                    activatedButton.get()
-                            ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
-                            : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
+                activatedButton.get()
+                    ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
+                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
             );
 
             iniciarEscucha();
@@ -126,7 +171,6 @@ public class StartController extends FatherController{
     @FXML
     public void pressedGang(MouseEvent event){
         ImageView imageView = (ImageView) event.getSource();
-        System.out.println("Click del disparo " + imageView.getImage().getUrl());
         if (activatedButton.get()) {
             try{
                 turno();
@@ -146,14 +190,11 @@ public class StartController extends FatherController{
         int[] coordinates = {Integer.parseInt(coords[0]), Integer.parseInt(coords[1]) };
         for (List<Integer[]> list : arraysShips) {
             for(Integer[] array : list){
-                System.out.println(array[0] + "," + array[1] + "||||" + coords[0] + "," + coords[1]);
                 if (array[0] == coordinates[0] && array[1] == coordinates[1]){
-                    System.out.println("Toco algo ñaño");
                     return 2; // Toco barco
                 }
             }
         }
-        System.out.println("Tocaste agua ñaño");
         return 3; // Toca agua
     }
 
@@ -180,10 +221,8 @@ public class StartController extends FatherController{
         {
             throw new Exception("No tengo registrado esto que has tocado");
         }
-
         imageView.setFitWidth(37.6);
         imageView.setFitHeight(36.8);
-
         // Agregar el ImageView en la misma posición (x, y)
         yourGrid.add(imageView, coordinates[0], coordinates[1]);
     }
@@ -192,11 +231,18 @@ public class StartController extends FatherController{
 
         Thread hiloEscuchando = new Thread(() -> {
             try{
+                // recibir disparo
                 String disparoRecibido = client.receiveMessageString();
-                System.out.println("El disparo es: " + disparoRecibido);
-                // Mensaje del que toco provisional
+                // Mensaje de lo que toco
                 int loqQueToco = searchCoordinatesWithGang(disparoRecibido);
                 client.sendMessageInt(loqQueToco);
+
+                if (!client.receiveMessageBoolean()){
+                    // Cambiar de pantalla con el atributo False
+                    // porque si entra en esta condicional significa
+                    // que ha perdido
+                    changeToMainWindow(false,client.nombreCliente);
+                }
 
                 Platform.runLater(() -> {
                     // Actualizar el grid del enemigo
@@ -223,8 +269,8 @@ public class StartController extends FatherController{
                                     "/org/example/hundirlaflota2/Images/button.png")
                             ).toExternalForm())
                     );
-
                 });
+
 
             }catch (IOException e){
                 System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
@@ -239,8 +285,6 @@ public class StartController extends FatherController{
     }
 
     private void handleCellClick(MouseEvent event, int row, int col) {
-        System.out.println("Clic en celda: (" + row + ", " + col + ")");
-
         // Este if funciona para que solo me muestre en la interfaz un pane rojo a la hora de disparar
         if (paneSelected != null) {
             paneSelected.setStyle("");
@@ -262,7 +306,6 @@ public class StartController extends FatherController{
                 final int finalCol = col;
                 pane.setOnMouseClicked(event -> handleCellClick(event, finalRow, finalCol));
                 pane.getStyleClass().add("pane-style");
-
                 // Agregar Pane al GridPane y también agrego las coordenadas donde está ubicado el pane
                 yourGrid.add(pane, col, row);
             }

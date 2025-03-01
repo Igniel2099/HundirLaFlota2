@@ -10,11 +10,7 @@ public class MainApp extends Application {
 
     public FatherWindow fatherWindow = new LoginWindow();
 
-    public FatherWindow getFatherWindow() {
-        return fatherWindow;
-    }
-
-    public void setFatherWindow(FatherWindow fatherWindow) {
+     public void setFatherWindow(FatherWindow fatherWindow) {
         this.fatherWindow = fatherWindow;
     }
 

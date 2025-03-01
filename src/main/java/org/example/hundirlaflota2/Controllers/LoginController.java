@@ -8,8 +8,6 @@ import javafx.scene.control.TextField;
 import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.Windows.UploadWindow;
 
-import java.io.IOException;
-
 public class LoginController extends FatherController{
 
     @FXML
@@ -21,7 +19,7 @@ public class LoginController extends FatherController{
     @FXML
     public void handleButtonClick(ActionEvent event) {
 
-        if(userField.getText().equals("") || passwordField.getText().equals("")) {
+        if(userField.getText().isEmpty() || passwordField.getText().isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -36,8 +34,10 @@ public class LoginController extends FatherController{
                 mainApp.start(getStage());
 
             }catch(Exception e){
-                System.out.println("Error en el LoginController: " + e.getMessage());
-                e.printStackTrace();
+                System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    System.err.println("\tat " + element);
+                }
             }
         }
 
