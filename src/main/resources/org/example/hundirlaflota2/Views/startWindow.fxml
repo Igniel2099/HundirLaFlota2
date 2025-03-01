@@ -16,6 +16,7 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane
+        fx:id="fatherPane"
         maxHeight="-Infinity"
         maxWidth="-Infinity"
         minHeight="-Infinity"
@@ -27,12 +28,14 @@
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="org.example.hundirlaflota2.Controllers.StartController">
     <children>
-        <ImageView fitHeight="780.0" fitWidth="1250.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView
+                fx:id="backgroundImageView"
+                pickOnBounds="true" >
             <image>
                 <Image url="@../Images/BackgroundMain.png" />
             </image>
         </ImageView>
-        <HBox prefHeight="100.0" prefWidth="200.0">
+        <HBox prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
             <children>
                 <VBox prefHeight="750.0" prefWidth="283.0">
                     <children>

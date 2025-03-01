@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.ServidorCliente.Cliente;
@@ -58,7 +59,19 @@ public class UploadController extends FatherController {
     }
 
     @FXML
+    private ImageView backgroundImageView;
+
+    @FXML
+    private StackPane fatherPane;
+
+    @FXML
     public void initialize() {
+        // Hacer que la imagen de detrás sea escalable
+        backgroundImageView.fitWidthProperty().bind(fatherPane.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(fatherPane.heightProperty());
+        backgroundImageView.setPreserveRatio(false);
+
+
         Timeline timeline = new Timeline();
 
         // Crear un KeyFrame que haga girar la imagen
@@ -79,7 +92,7 @@ public class UploadController extends FatherController {
 
         new Thread(() -> {
             try {
-                Thread.sleep(10); // Tengo que cambiarlo a 3000 ms osea 3 segundos
+                Thread.sleep(5000); // Tengo que cambiarlo a 3000 ms osea 3 segundos
                 initSecondThread();
             } catch (InterruptedException e) {
                 System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());

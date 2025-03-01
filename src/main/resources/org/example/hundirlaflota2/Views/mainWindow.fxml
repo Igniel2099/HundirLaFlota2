@@ -6,14 +6,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.hundirlaflota2.Controllers.MainController">
+<StackPane
+        fx:id="fatherPane"
+        maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" stylesheets="@style.css"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.example.hundirlaflota2.Controllers.MainController">
     <children>
-        <ImageView fitHeight="780.0" fitWidth="1250.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView
+                fx:id="backgroundImageView"
+                pickOnBounds="true">
             <image>
                 <Image url="@../Images/BackgroundMain.png" />
             </image>
         </ImageView>
-        <HBox prefHeight="100.0" prefWidth="200.0">
+        <HBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER">
             <children>
                 <VBox prefHeight="750.0" prefWidth="283.0">
                     <children>
@@ -168,6 +175,6 @@
                     </HBox.margin>
                 </VBox>
             </children>
-        </HBox>
+        </HBox >
     </children>
 </StackPane>

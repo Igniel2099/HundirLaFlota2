@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.Service.Communication;
 import org.example.hundirlaflota2.Service.ConvertMatrix;
@@ -91,7 +92,17 @@ public class MainController extends FatherController {
     }
 
     @FXML
+    private ImageView backgroundImageView;
+
+    @FXML
+    private StackPane fatherPane;
+
+    @FXML
     public void initialize() {
+
+        backgroundImageView.fitWidthProperty().bind(fatherPane.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(fatherPane.heightProperty());
+        backgroundImageView.setPreserveRatio(false);
 
         initMatrix();
         // inicializo el listener del label :)

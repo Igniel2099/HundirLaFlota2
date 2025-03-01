@@ -144,9 +144,6 @@ public class Servidor {
         // Aquí le mando el booleano al otro cliente para que sepa si ha perdido
         listOutputs.getLast().writeBoolean(yaGano);
 
-        // Aquí tengo que mandas un booleano para que ver si el atacante ha ganado y romper él circulo de jugadas
-
-
         DataInputStream primerIn = listInputs.removeFirst();
         listInputs.add(primerIn);
         DataOutputStream primerOut = listOutputs.removeFirst();

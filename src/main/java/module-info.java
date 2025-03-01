@@ -3,7 +3,7 @@ module org.example.hundirlaflota2 {
     requires javafx.fxml;
 
     opens org.example.hundirlaflota2 to javafx.fxml;
-    opens org.example.hundirlaflota2.Windows to javafx.graphics; // ✅ SOLUCIÓN
+    opens org.example.hundirlaflota2.Windows to javafx.fxml;
     opens org.example.hundirlaflota2.Controllers to javafx.fxml;
 
     exports org.example.hundirlaflota2;
@@ -12,3 +12,4 @@ module org.example.hundirlaflota2 {
     exports org.example.hundirlaflota2.ServidorCliente;
     exports org.example.hundirlaflota2.Service;
 }
+
