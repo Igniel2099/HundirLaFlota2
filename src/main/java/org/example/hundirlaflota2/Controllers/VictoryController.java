@@ -33,7 +33,7 @@ public class VictoryController extends FatherController {
         this.name = name;
     }
 
-    public void changeImageWinner(){
+    private void changeImageWinner(){
         if (!ganaste){
             imageWinner.setImage(
                     new Image(Objects.requireNonNull(
@@ -44,7 +44,7 @@ public class VictoryController extends FatherController {
         }
     }
 
-    public void changeLabelWinner(){
+    private void changeLabelWinner(){
 
         String text = ganaste ? "Eres un Ganador" : "Eres un perdedor";
         text += name;
@@ -62,6 +62,5 @@ public class VictoryController extends FatherController {
         backgroundImageView.fitWidthProperty().bind(fatherPane.widthProperty());
         backgroundImageView.fitHeightProperty().bind(fatherPane.heightProperty());
         backgroundImageView.setPreserveRatio(false);
-        changeElementWindow();
     }
 }

@@ -13,6 +13,7 @@ public class VictoryWindow extends FatherWindow{
         victoryController.setStage(stage);
         victoryController.setGanaste(gano);
         victoryController.setName(name);
+        victoryController.changeElementWindow();
     }
 
     public VictoryWindow(boolean ganaste, String nameClient){

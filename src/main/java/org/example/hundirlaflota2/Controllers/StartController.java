@@ -236,7 +236,7 @@ public class StartController extends FatherController{
                 int loqQueToco = searchCoordinatesWithGang(disparoRecibido);
                 client.sendMessageInt(loqQueToco);
 
-                if (!client.receiveMessageBoolean()){
+                if (client.receiveMessageBoolean()){
                     // Cambiar de pantalla con el atributo False
                     // porque si entra en esta condicional significa
                     // que ha perdido
