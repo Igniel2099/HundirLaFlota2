@@ -13,7 +13,11 @@ import org.example.hundirlaflota2.Windows.MainWindow;
 
 public class UploadController extends FatherController {
 
-    public Cliente client = new Cliente("Cliente1");
+    public UploadController(String nameClient) {
+        client = new Cliente(nameClient);
+    }
+
+    public Cliente client;
 
     @FXML
     private ImageView imageViewRotate;

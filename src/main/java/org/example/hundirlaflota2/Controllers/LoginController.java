@@ -3,7 +3,6 @@ package org.example.hundirlaflota2.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.example.hundirlaflota2.MainApp;
 import org.example.hundirlaflota2.Windows.UploadWindow;
@@ -29,7 +28,7 @@ public class LoginController extends FatherController{
         } else if (userField.getText().equals(passwordField.getText())) {
 
             MainApp mainApp = new MainApp();
-            mainApp.setFatherWindow(new UploadWindow());
+            mainApp.setFatherWindow(new UploadWindow(userField.getText()));
             try{
                 mainApp.start(getStage());
 
