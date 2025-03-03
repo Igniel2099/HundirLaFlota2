@@ -1,17 +1,42 @@
 package org.example.hundirlaflota2.Service;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ConvertMatrix {
 
+    public Map<Integer,String> mapToImageShip(String orientation){
+        if (orientation.equals("vertical")){
+            return new HashMap<>(){{
+                put(1,"/org/example/hundirlaflota2/Images/ship1Vertical.png");
+                put(2,"/org/example/hundirlaflota2/Images/ship2Vertical.png");
+                put(3,"/org/example/hundirlaflota2/Images/ship3Vertical.png");
+                put(4,"/org/example/hundirlaflota2/Images/ship4Vertical.png");
+            }};
 
+        }
+        if (orientation.equals("horizontal")){
+            return new HashMap<>(){{
+                put(1, "/org/example/hundirlaflota2/Images/ship1Horizontal.png");
+                put(2,"/org/example/hundirlaflota2/Images/ship2Horizontal.png");
+                put(3,"/org/example/hundirlaflota2/Images/ship3Horizontal.png");
+                put(4,"/org/example/hundirlaflota2/Images/ship4Horizontal.png");
+            }};
+        }
+        return null;
+    }
+
+    public String selectionShipImage(String orientation, Integer sizeShip){
+        return mapToImageShip(orientation).get(sizeShip);
+    }
 
     public void mergeCells(GridPane gridPane, List<Integer[]> coords) {
 
+        System.out.println("Estos son las coordenadas que estoy buscando");
         for (Integer[] coord : coords) {
             System.out.println(Arrays.toString(coord));
         }
@@ -19,33 +44,40 @@ public class ConvertMatrix {
         Integer[] first = coords.getFirst();
         Integer[] last = coords.getLast();
 
-        int startCol = first[1]; // Columna inicial
-        int startRow = first[0]; // Fila inicial
-        int endCol = last[1]; // Última columna
-        int endRow = last[0]; // Última fila
-
-        // Crear un Pane unificado
-        Pane mergedPane = new Pane();
-        mergedPane.setStyle("-fx-background-color: lightblue; -fx-border-color: black;");
-        mergedPane.setPrefSize((endCol - startCol + 1) * 37.6, (endRow - startRow + 1) * 36.8);
-
-        // Remover las celdas individuales
-        coords.forEach(coord -> {
-            gridPane.getChildren().removeIf(node ->
-                GridPane.getRowIndex(node) == coord[0] && GridPane.getColumnIndex(node) == coord[1]
-            );
-        });
-
-        // Agregar el Pane grande en la posición inicial
-        gridPane.add(mergedPane, startCol, startRow);
+        int startCol = first[1];
+        int startRow = first[0];
+        int endCol = last[1];
+        int endRow = last[0];
 
         // Aplicar rowSpan o colSpan
+        ImageView imageView = new ImageView();
         if (startRow == endRow) {
-            GridPane.setColumnSpan(mergedPane, endCol - startCol + 1);
-        } else if (startCol == endCol) {
-            GridPane.setRowSpan(mergedPane, endRow - startRow + 1);
-        }
+            imageView.setImage(
+                new Image(
+                    Objects.requireNonNull(getClass().getResource(
+                        selectionShipImage("horizontal", endCol - startCol + 1)
+                    )).toExternalForm()
+                )
+            );
 
+            imageView.setFitHeight( 37.6);
+            imageView.setFitWidth((endCol - startCol + 1) * 36.8);
+            GridPane.setColumnSpan(imageView, endCol - startCol + 1);
+
+        } else if (startCol == endCol) {
+            imageView.setImage(
+                new Image(
+                    Objects.requireNonNull(getClass().getResource(
+                        selectionShipImage("vertical", endRow - startRow + 1)
+                    )).toExternalForm()
+                )
+            );
+
+            imageView.setFitHeight((endRow - startRow + 1) * 37.6);
+            imageView.setFitWidth( 36.8);
+            GridPane.setRowSpan(imageView, endRow - startRow + 1);
+        }
+        gridPane.add(imageView, startCol, startRow);
     }
 
     public void buildGridPaneWithPaneWater(GridPane gridPane) {

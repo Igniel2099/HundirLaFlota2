@@ -92,7 +92,7 @@ public class UploadController extends FatherController {
 
         new Thread(() -> {
             try {
-                Thread.sleep(5000); // Tengo que cambiarlo a 3000 ms osea 3 segundos
+                Thread.sleep(2000); // Tengo que cambiarlo a 3000 ms ósea 3 segundos
                 initSecondThread();
             } catch (InterruptedException e) {
                 System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());

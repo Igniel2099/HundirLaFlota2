@@ -39,11 +39,6 @@
             <children>
                 <VBox prefHeight="750.0" prefWidth="283.0">
                     <children>
-                        <Label text="¡Tu Turno!" textFill="#f4f4f4">
-                            <font>
-                                <Font name="System Bold" size="36.0" />
-                            </font>
-                        </Label>
 
                         <ImageView
                                 fx:id="bulletButton"

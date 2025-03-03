@@ -161,7 +161,7 @@ public class StartController extends FatherController{
             bulletButton.setImage(
                 activatedButton.get()
                     ? new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonBang.png")).toExternalForm())
-                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/button.png")).toExternalForm())
+                    : new Image(Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/buttonWaiting.png")).toExternalForm())
             );
 
             iniciarEscucha();
@@ -244,7 +244,6 @@ public class StartController extends FatherController{
                     Platform.runLater(() -> changeToMainWindow(false,client.nombreCliente));
 
                 }
-
                 Platform.runLater(() -> {
                     // Actualizar el grid del enemigo
                     try{
@@ -267,7 +266,7 @@ public class StartController extends FatherController{
 
                             : new Image(Objects.requireNonNull(
                                 getClass().getResource(
-                                    "/org/example/hundirlaflota2/Images/button.png")
+                                    "/org/example/hundirlaflota2/Images/buttonWaiting.png")
                             ).toExternalForm())
                     );
                 });
@@ -293,7 +292,10 @@ public class StartController extends FatherController{
         positionGang = new ArrayList<>(Arrays.asList(row, col));
 
         paneSelected = (Pane) event.getSource();
-        paneSelected.setStyle("-fx-background-color: red");
+        String urlImageGang = Objects.requireNonNull(getClass().getResource("/org/example/hundirlaflota2/Images/bang.png")).toExternalForm();
+        paneSelected.setStyle("-fx-background-image: url('" + urlImageGang + "');" +
+                "-fx-background-size: cover;"+
+                "-fx-background-position: center;");
     }
 
     public void paneFillingYourGridPane(){

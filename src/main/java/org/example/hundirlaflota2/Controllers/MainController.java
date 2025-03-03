@@ -28,6 +28,7 @@ public class MainController extends FatherController {
     private Integer shipSpace;
     private List<Integer[]> listCoordinates = new ArrayList<>();
     private final List<List<Integer[]>> listAllCoordinates = new ArrayList<>();
+    private List<Pane> panesSelected = new ArrayList<>();
 
     @FXML
     private Label quantityShipFour;
@@ -78,7 +79,14 @@ public class MainController extends FatherController {
     private void initMatrix() {
         ConvertMatrix convertMatrix = new ConvertMatrix();
         convertMatrix.buildGridPaneWithPaneWater(myGrid);
-        setEventToPane();
+        try{
+            setEventToPane();
+        }catch (Exception e){
+            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
+        }
     }
 
     private void initListenerLabel(){
@@ -170,7 +178,6 @@ public class MainController extends FatherController {
         imageButton.getStyleClass().clear();
     }
 
-    // Tengo que refactorizar
     @FXML
     private void pressedStart(MouseEvent event) {
         if (quantityShipFour.getText().equals("0") &&
@@ -189,7 +196,6 @@ public class MainController extends FatherController {
             }
         }
     }
-
 
     /**
      * Método para que client envie mensajes
@@ -252,7 +258,7 @@ public class MainController extends FatherController {
             int maxCol = Math.max(start[1], end[1]);
 
             for (int col = minCol; col <= maxCol; col++) {
-                coordinates.add(new Integer[]{row, col}); // ✅ Corrección aquí
+                coordinates.add(new Integer[]{row, col});
             }
         }
         // Movimiento vertical (misma columna, diferente fila)
@@ -262,7 +268,7 @@ public class MainController extends FatherController {
             int maxRow = Math.max(start[0], end[0]);
 
             for (int row = minRow; row <= maxRow; row++) {
-                coordinates.add(new Integer[]{row, col}); // ✅ Corrección aquí
+                coordinates.add(new Integer[]{row, col});
             }
         }
         return coordinates;
@@ -294,7 +300,9 @@ public class MainController extends FatherController {
                     Integer nodeCol = GridPane.getColumnIndex(node);
 
                     if (Objects.equals(nodeRow, coord[0]) && Objects.equals(nodeCol, coord[1])) {
-                        node.setStyle("-fx-background-color:  #2C4080; -fx-border-color: black");
+//                        node.setStyle("-fx-background-color:  #2C4080; -fx-border-color: black");
+                        node.setStyle("");
+
                     }
                 }
             }
@@ -305,6 +313,7 @@ public class MainController extends FatherController {
 
         ConvertMatrix matrix = new ConvertMatrix();
         matrix.mergeCells(gridPane, coords);
+
 
         return true;
     }
@@ -321,6 +330,7 @@ public class MainController extends FatherController {
             clickedPane.setStyle("-fx-background-color: blue;"); // Cambia color al hacer clic
 
             listCoordinates.add(new Integer[]{row, col});
+            panesSelected.add(clickedPane);
             if(listCoordinates.size() == 2){
                 try{
                     sorterCords();
@@ -329,6 +339,10 @@ public class MainController extends FatherController {
 
                         Label electionLabel = map.get(shipSpace);
                         electionLabel.setText(String.valueOf(Integer.parseInt(electionLabel.getText()) - 1));
+                        for (Pane pane : panesSelected) {
+                            pane.setStyle("");
+                        }
+
                     }
                 }catch (Exception e){
                     System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
@@ -337,11 +351,12 @@ public class MainController extends FatherController {
                     }
                 }
                 listCoordinates = new ArrayList<>();
+                panesSelected = new ArrayList<>();
             }
         }
     }
 
-    private void setEventToPane(){
+    private void setEventToPane() throws Exception {
         for (Node node : myGrid.getChildren()) {
             Integer rowIndex = GridPane.getRowIndex(node);
             Integer colIndex = GridPane.getColumnIndex(node);
@@ -352,6 +367,7 @@ public class MainController extends FatherController {
 
             final Integer row = rowIndex;
             final Integer col = colIndex;
+            System.out.println(row + "|" + col);
             node.setOnMouseClicked(event -> handleCellClick(event, row, col));
         }
     }
