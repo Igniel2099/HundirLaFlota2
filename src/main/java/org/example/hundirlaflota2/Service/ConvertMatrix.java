@@ -36,10 +36,6 @@ public class ConvertMatrix {
 
     public void mergeCells(GridPane gridPane, List<Integer[]> coords) {
 
-        System.out.println("Estos son las coordenadas que estoy buscando");
-        for (Integer[] coord : coords) {
-            System.out.println(Arrays.toString(coord));
-        }
         // Obtener la primera y última coordenada
         Integer[] first = coords.getFirst();
         Integer[] last = coords.getLast();

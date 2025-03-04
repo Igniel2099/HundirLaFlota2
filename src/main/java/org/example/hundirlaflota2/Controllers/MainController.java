@@ -79,14 +79,9 @@ public class MainController extends FatherController {
     private void initMatrix() {
         ConvertMatrix convertMatrix = new ConvertMatrix();
         convertMatrix.buildGridPaneWithPaneWater(myGrid);
-        try{
-            setEventToPane();
-        }catch (Exception e){
-            System.err.println("Error en " + getClass().getSimpleName() + ": " + e.getMessage());
-            for (StackTraceElement element : e.getStackTrace()) {
-                System.err.println("\tat " + element);
-            }
-        }
+
+        setEventToPane();
+
     }
 
     private void initListenerLabel(){
@@ -125,7 +120,7 @@ public class MainController extends FatherController {
     }
 
     /**
-     * Este método sirve para cambiar de Scena a StarWindow
+     * Este método sirve para cambiar de Scene a StarWindow
      */
     private void changeStartWindow(List<List<Integer[]>> listCoordinates) {
 
@@ -146,7 +141,7 @@ public class MainController extends FatherController {
      * Este es un hilo terciario que siempre va a estar escuchando la respuesta del otro cliente
      * Utilizo CompletableFuture.runAsync junto con un While(true) para asegurarme de que este hilo
      * se ejecuta de manera asíncrona al hilo principal que es la UI.
-     * Con el Thread No funciona bien, porque se ejecutaba de manera síncrona, osea, se ejecutaba después de
+     * Con el Thread No funciona bien, porque se ejecutaba de manera síncrona, o sea, se ejecutaba después de
      * la UI terminara su trabajo
      */
     public void threadListens() {
@@ -184,7 +179,7 @@ public class MainController extends FatherController {
                 quantityShipThree.getText().equals("0") &&
                 quantityShipTwo.getText().equals("0")) {
 
-            DisableButtonVisuals((ImageView) event.getSource()); // Deshabilita weas del botón
+            DisableButtonVisuals((ImageView) event.getSource()); // Deshabilita eventos del botón
 
             buttonActionPressed = true;
 
@@ -292,6 +287,7 @@ public class MainController extends FatherController {
     }
 
     private boolean mergeCells(GridPane gridPane, List<Integer[]> coords) {
+
         if (!comprobateCoords(coords)){
 
             for (Integer[] coord : coords) {
@@ -300,9 +296,7 @@ public class MainController extends FatherController {
                     Integer nodeCol = GridPane.getColumnIndex(node);
 
                     if (Objects.equals(nodeRow, coord[0]) && Objects.equals(nodeCol, coord[1])) {
-//                        node.setStyle("-fx-background-color:  #2C4080; -fx-border-color: black");
                         node.setStyle("");
-
                     }
                 }
             }
@@ -314,8 +308,45 @@ public class MainController extends FatherController {
         ConvertMatrix matrix = new ConvertMatrix();
         matrix.mergeCells(gridPane, coords);
 
+        removeEvents(gridPane, coords);
 
         return true;
+    }
+
+    private void loopCoords(GridPane gridPane,int elementStart, int elementEnd, int row, int col, String electionElement){
+        for (int i = elementStart; i <= elementEnd; i++) {
+            for (Node node : gridPane.getChildren()) {
+                Integer nodeRow = GridPane.getRowIndex(node);
+                Integer nodeCol = GridPane.getColumnIndex(node);
+
+                if (electionElement.equals("row")){
+                    if (Objects.equals(nodeRow, row) && Objects.equals(nodeCol, i)) {
+                        node.setOnMouseClicked(null);
+                    }
+                }else if (electionElement.equals("col")){
+                    if (Objects.equals(nodeRow, i) && Objects.equals(nodeCol, col)) {
+                        node.setOnMouseClicked(null);
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeEvents(GridPane gridPane, List<Integer[]> coords) {
+        Integer[] first = coords.getFirst();
+        Integer[] last = coords.getLast();
+
+        int startCol = first[1];
+        int startRow = first[0];
+        int endCol = last[1];
+        int endRow = last[0];
+
+        if (startRow == endRow) {
+            loopCoords(gridPane,startCol,endCol,startRow,startCol,"row");
+
+        } else if (startCol == endCol) {
+            loopCoords(gridPane,startCol,endCol,startRow,startCol,"col");
+        }
     }
 
     private void handleCellClick(MouseEvent event, int row, int col) {
@@ -356,7 +387,7 @@ public class MainController extends FatherController {
         }
     }
 
-    private void setEventToPane() throws Exception {
+    private void setEventToPane() {
         for (Node node : myGrid.getChildren()) {
             Integer rowIndex = GridPane.getRowIndex(node);
             Integer colIndex = GridPane.getColumnIndex(node);
@@ -367,7 +398,6 @@ public class MainController extends FatherController {
 
             final Integer row = rowIndex;
             final Integer col = colIndex;
-            System.out.println(row + "|" + col);
             node.setOnMouseClicked(event -> handleCellClick(event, row, col));
         }
     }
