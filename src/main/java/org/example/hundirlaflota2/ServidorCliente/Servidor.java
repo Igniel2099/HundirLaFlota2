@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.net.InetAddress;
+
 
 public class Servidor {
     public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class Servidor {
 
         final int PUERTO = 5000;
 
-        try (ServerSocket serverSocket = new ServerSocket(PUERTO)){
+        try (ServerSocket serverSocket = new ServerSocket(PUERTO, 0, InetAddress.getByName("192.168.56.1"))){
 
             System.out.println("Servidor conectado");
 
