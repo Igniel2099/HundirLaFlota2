@@ -43,7 +43,7 @@ public class Cliente {
 
     public void connectionToServer() throws IOException {
 
-        setSocket(new Socket("192.168.56.1",5000));
+        setSocket(new Socket("10.134.75.114",5000));
         setIn(new DataInputStream(getSocket().getInputStream()));
         setOut(new DataOutputStream(getSocket().getOutputStream()));
         System.out.println("Conectado al servidor");

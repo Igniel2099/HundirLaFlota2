@@ -19,7 +19,7 @@ public class Servidor {
 
         final int PUERTO = 5000;
 
-        try (ServerSocket serverSocket = new ServerSocket(PUERTO, 0, InetAddress.getByName("192.168.56.1"))){
+        try (ServerSocket serverSocket = new ServerSocket(PUERTO, 0, InetAddress.getByName("10.134.75.114"))){
 
             System.out.println("Servidor conectado");
 
